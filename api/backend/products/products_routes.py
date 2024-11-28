@@ -206,3 +206,30 @@ def update_product():
     current_app.logger.info(product_info)
 
     return "Success"
+
+# ------------------------------------------------------------
+# Route to get the 8 most frequently ordered items from the
+# database.
+@products.route('/eightMostFrequent', methods=['GET'])
+def get_8_most_frequent_products():
+    
+    query = '''
+        SELECT product_name,
+                company as supplier_name,
+                COUNT(*) AS num_orders
+        FROM products
+        JOIN suppliers ON products.supplier_ids = suppliers.id
+        GROUP BY product_name, supplier_name
+        ORDER BY num_orders DESC, product_name ASC
+        LIMIT 8;
+    '''
+     
+    # Same process as above
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+    
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
+
