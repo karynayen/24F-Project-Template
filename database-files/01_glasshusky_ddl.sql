@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS company (
     name    VARCHAR(50) NOT NULL,
     size    INT,
     companyID   INT AUTO_INCREMENT PRIMARY KEY,
-    days_on_site    INT
 );
 
 DROP TABLE IF EXISTS `position`;
