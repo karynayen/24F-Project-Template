@@ -15,11 +15,24 @@ from backend.db_connection import db
 industries = Blueprint('industries', __name__)
 
 #------------------------------------------------------------
+# Get all companies from the system
+@industries.route('/industries', methods=['GET'])
+def get_industries(): 
+    query = 'SELECT * FROM industry'
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
+#------------------------------------------------------------
 # Get all the products from the database, package them up,
 # and return them to the client
 @industries.route('/industries/<industryID>/companies', methods=['GET'])
-def get_products():
-    query = '''
+def get_industry(industryID):
+    query = f'''
         SELECT  i.name AS industry_name,
                 c.name AS company_name,
                 c.size AS company_size,
@@ -34,6 +47,7 @@ def get_products():
             JOIN position p ON p.positionID = r.positionID
             JOIN positionTargetCollege ptc ON ptc.positionID = p.positionID
             JOIN college col ON col.collegeID = ptc.collegeID
+        WHERE i.industryID = {int(industryID)}
         GROUP BY i.name, c.name, c.name, i.name, c.size, col.name
     '''
     

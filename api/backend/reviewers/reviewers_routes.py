@@ -18,37 +18,22 @@ reviewers = Blueprint('reviewers', __name__)
 # Get all the reviewers from the database, package them up,
 # and return them to the client
 @reviewers.route('/reviewers', methods=['GET'])
-def get_reviewers():
-    query = '''
-        SELECT major, name, num_co-ops, year, num_posts, bio 
-        FROM reviewer r
-    '''
-    
-    # get a cursor object from the database~ cursor is like 2d grid that you can iterate over with your code
+def get_reviewers(): 
+    query = 'SELECT * FROM reviewer'
     cursor = db.get_db().cursor()
-
-    # use cursor to query the database for a list of products
     cursor.execute(query)
-
-    # fetch all the data from the cursor
-    # The cursor will return the data as a 
-    # Python Dictionary
     theData = cursor.fetchall()
 
-    # Create a HTTP Response object and add results of the query to it
-    # after "jasonify"-ing it.
-    response = make_response(jsonify(theData))
-    # set the proper HTTP Status code of 200 (meaning all good)
-    response.status_code = 200
-    # send the response back to the client
-    return response
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
 
 
 # ------------------------------------------------------------
 # This is a POST route to add a new product.
 # Remember, we are using POST routes to create new entries
 # in the database. 
-@reviewers.route('/reviewers/<reviewerID>', methods=['PUT'])
+@reviewers.route('/reviewers', methods=['POST'])
 def add_new_reviewer():
     
     # In a POST request, there is a 
@@ -86,4 +71,20 @@ def add_new_reviewer():
     response.status_code = 200
     return response
 
+@reviewers.route('/reviewers/<reviewerID>', methods=['PUT'])
+def update_reviewer(reviewerID):
+    current_app.logger.info('PUT /reviewers/<reviewerID> route')
+    reviewer_info = request.json
+    major = reviewer_info['major']
+    name = reviewer_info['name']
+    num_coops = reviewer_info['num_co-ops']
+    year = reviewer_info['year']
+    bio = reviewer_info['bio']
+    active = reviewer_info['active']
 
+    query = 'UPDATE company SET major = %s, name = %s, num_co-ops  = %s, year  = %s, bio  = %s, active  = %s where reviewerID = %s'
+    data = (major, name, num_coops, year, bio, active)
+    cursor = db.get_db().cursor()
+    r = cursor.execute(query, data)
+    db.get_db().commit()
+    return 'reviewer updated!'
