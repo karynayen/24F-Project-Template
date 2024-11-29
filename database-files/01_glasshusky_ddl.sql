@@ -43,7 +43,6 @@ CREATE TABLE IF NOT EXISTS reviewer (
     name         VARCHAR(50),
     `num_co-ops` INT,
     year         INT,
-    num_posts    INT,
     bio          VARCHAR(2500),
     active      BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (reviewerID)
