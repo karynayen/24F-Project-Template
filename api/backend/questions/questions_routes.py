@@ -17,20 +17,25 @@ questions = Blueprint('questions', __name__)
 
 #------------------------------------------------------------
 # Edit a posted questions
-@questions.route('/questions', methods=['PUT'])
+@questions.route('/questions/<questionId>', methods=['PUT'])
 def edit_question(): 
-    query = f'''
-        UPDATE {table_name} 
-        SET {column} = {new_value}
-        WHERE {condition};
+    current_app.logger.info('PUT/questions/<questionId> route')
+    question_info = request.json
+    questionId = question_info['questionId']
+    text = question_info[text]
+    
+    
+    query = '''
+        UPDATE question
+        SET text = %s
+        WHERE questionId = %s;
     '''
+    data = {questionId, text}
     cursor = db.get_db().cursor()
-    cursor.execute(query)
-    theData = cursor.fetchall()
-
-    the_response = make_response(jsonify(theData))
-    the_response.status_code = 200
-    return the_response
+    cursor.execute(query, data)
+    db.get_db().commit()
+    
+    return 'Question Updated!'
 
 #------------------------------------------------------------
 
