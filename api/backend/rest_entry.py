@@ -3,6 +3,7 @@ from flask import Flask
 from backend.db_connection import db
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
+from backend.companies.companies_routes import companies
 from backend.simple.simple_routes import simple_routes
 from backend.reviews.reviews_routes import reviews
 import os
@@ -30,7 +31,7 @@ def create_app():
     app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_ROOT_PASSWORD').strip()
     app.config['MYSQL_DATABASE_HOST'] = os.getenv('DB_HOST').strip()
     app.config['MYSQL_DATABASE_PORT'] = int(os.getenv('DB_PORT').strip())
-    app.config['MYSQL_DATABASE_DB'] = os.getenv('DB_NAME').strip()  # Change this to your DB name
+    app.config['MYSQL_DATABASE_DB'] = "glasshusky" # Change this to your DB name
 
     # Initialize the database object with the settings above. 
     app.logger.info('current_app(): starting the database connection')
@@ -44,6 +45,7 @@ def create_app():
     app.register_blueprint(reviews)
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
+    app.register_blueprint(companies,   url_prefix='/co')
 
     # Don't forget to return the app object
     return app
