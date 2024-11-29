@@ -12,29 +12,16 @@ from backend.db_connection import db
 #------------------------------------------------------------
 # Create a new Blueprint object, which is a collection of 
 # routes.
-reviewers = Blueprint('products', __name__)
+reviewers = Blueprint('reviewers', __name__)
 
 #------------------------------------------------------------
-# Get all the products from the database, package them up,
+# Get all the reviewers from the database, package them up,
 # and return them to the client
-@industries.route('/industries/<industryID>/companies', methods=['GET'])
-def get_products():
+@reviewers.route('/reviewers', methods=['GET'])
+def get_reviewers():
     query = '''
-        SELECT  i.name AS industry_name,
-                c.name AS company_name,
-                c.size AS company_size,
-                AVG(r.rating) AS overall_rating,
-                COUNT(r.rating) AS num_ratings,
-                COUNT(r.reviewID) AS num_reviews,
-                col.name AS college_name
-        FROM company c
-            JOIN companyIndustry ci ON c.companyID = ci.companyID
-            JOIN industry i ON i.industryID = ci.industryID
-            JOIN reviews r ON c.companyID = r.companyID
-            JOIN position p ON p.positionID = r.positionID
-            JOIN positionTargetCollege ptc ON ptc.positionID = p.positionID
-            JOIN college col ON col.collegeID = ptc.collegeID
-        GROUP BY i.name, c.name, c.name, i.name, c.size, col.name
+        SELECT major, name, num_co-ops, year, num_posts, bio 
+        FROM reviewer r
     '''
     
     # get a cursor object from the database~ cursor is like 2d grid that you can iterate over with your code
@@ -61,8 +48,8 @@ def get_products():
 # This is a POST route to add a new product.
 # Remember, we are using POST routes to create new entries
 # in the database. 
-@industries.route('/industries', methods=['POST'])
-def add_new_industry():
+@reviewers.route('/reviewers/<reviewerID>', methods=['PUT'])
+def add_new_reviewer():
     
     # In a POST request, there is a 
     # collecting data from the request object 
@@ -70,12 +57,16 @@ def add_new_industry():
     current_app.logger.info(the_data)
 
     #extracting the variable
-    name = the_data['industry_name']
-    id = the_data['industryID']
+    major = the_data['major']
+    name = the_data['reviewer_name']
+    num_coops = the_data['num_coops']
+    year = the_data['year']
+    bio = the_data['bio']
+    active = the_data['active']
     
     query = f'''
-        INSERT INTO industry (name, industryID)
-        VALUES ('{name}', '{id}')
+        INSERT INTO reviewer (major, name, num_co-ops, year, num_posts, bio, active)
+        VALUES ('{major}', '{name}', '{num_coops}', '{year}', '{bio}', '{active}',)
     '''
     # TODO: Make sure the version of the query above works properly
     # Constructing the query
