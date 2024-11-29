@@ -156,16 +156,16 @@ def get_company_reviews_answers(companyID):
 def get_company_positions_reviews_questions(companyID, positionID):
     current_app.logger.info('GET /companies/<companyID>/positions/<positionID>/reviews/questions route')
     query = f'''
-        SELECT q.text, q.author, q.postId, q.questionId
+        SELECT q.text, q.author, q.postId, q.questionId, p.positionID
         FROM company c 
+            JOIN position p ON c.companyID = p.companyID
             JOIN reviews r ON c.companyID = r.companyID
             JOIN questions q ON r.reviewID = q.postId
-        WHERE c.companyID = {companyID} AND r.positionID = {positionID}
+        WHERE c.companyID = {companyID} AND p.positionID = {positionID}
     '''
     cursor = db.get_db().cursor()
     cursor.execute(query)
     theData = cursor.fetchall()
-
     current_app.logger.info(f'GET /companies/{companyID}/positions/{positionID}/reviews/questions Result of the query={theData}')
 
     response = make_response(jsonify(theData))
@@ -178,11 +178,12 @@ def get_company_positions_reviews_questions(companyID, positionID):
 def get_company_positions_reviews_answers(companyID, positionID):
     current_app.logger.info('GET /companies/<companyID>/positions/<positionID>/reviews/answers route')
     query = f'''
-        SELECT a.text, a.author, a.postId, a.answerId
+        SELECT a.text, a.author, a.postId, a.answerId, p.positionID
         FROM company c 
+            JOIN position p ON c.companyID = p.companyID
             JOIN reviews r ON c.companyID = r.companyID
             JOIN answers a ON r.reviewID = a.postId
-        WHERE c.companyID = {companyID} AND r.positionID = {positionID}
+        WHERE c.companyID = {companyID} AND p.positionID = {positionID}
     '''
     cursor = db.get_db().cursor()
     cursor.execute(query)
