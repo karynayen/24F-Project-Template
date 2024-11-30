@@ -85,11 +85,10 @@ def add_new_industry():
 
     #extracting the variable
     name = the_data['industry_name']
-    id = the_data['industryID']
     
     query = f'''
-        INSERT INTO industry (name, industryID)
-        VALUES ('{name}', '{id}')
+        INSERT INTO `industry` (name)
+        VALUES ('{name}')
     '''
     # TODO: Make sure the version of the query above works properly
     # Constructing the query
@@ -105,6 +104,6 @@ def add_new_industry():
     cursor.execute(query)
     db.get_db().commit()
     
-    response = make_response("Successfully added product")
+    response = make_response("Successfully added industry")
     response.status_code = 200
     return response
