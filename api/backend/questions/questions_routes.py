@@ -49,3 +49,37 @@ def edit_question(questionId):
         db.get_db().rollback()
         return jsonify({"error": str(e)}), 500
     
+#------------------------------------------------------------
+# Delete questions
+@questions.route('/questions/<questionId>', methods=['DELETE'])
+def delete_quesitons(questionId):
+    try:
+        current_app.logger.info(f'DELETE /questions/{questionId}' 'route')
+        question_info = request.json
+        
+        check_questionId_query = '''
+            SELECT * 
+            FROM questions
+            WHERE questionId = %s
+        '''
+        cursor = db.get_db().cursor()
+        cursor.execute(check_questionId_query, (questionId,))
+        if cursor.fetchone() is None:
+            return jsonify({'error': 'Question not found'}), 404
+        
+        
+        query = '''
+            DELETE FROM questions
+            WHERE questionId = %s
+        '''
+        
+        cursor.execute(query, (questionId,))
+        db.get_db().commit()
+        current_app.logger.info(f'Question {questionId} successfully deleted!')
+        return jsonify({"message": "Question Deleted!"}), 200
+    
+    except Exception as e:
+        current_app.logger.error(f'Error deleting question {questionId}: {str(e)}')
+        db.get_db().rollback()
+        return jsonify({"error": str(e)}), 500
+                                
