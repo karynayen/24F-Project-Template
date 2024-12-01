@@ -18,24 +18,34 @@ questions = Blueprint('questions', __name__)
 #------------------------------------------------------------
 # Edit a posted questions
 @questions.route('/questions/<questionId>', methods=['PUT'])
-def edit_question(): 
-    current_app.logger.info('PUT/questions/<questionId> route')
-    question_info = request.json
-    questionId = question_info['questionId']
-    text = question_info[text]
+def edit_question(questionId):
+    try:
+        current_app.logger.info(f'PUT /questions/{questionId} route')
+        question_info = request.json
+        text = question_info['text']
+        
+        query = '''
+            UPDATE questions
+            SET text = %s
+            WHERE questionId = %s
+        '''
+        
+        data = (text, questionId)
+        cursor = db.get_db().cursor()
+        r = cursor.execute(query, data)
+        db.get_db().commit()
+        
+        current_app.logger.info(f'Question {questionId} successfully updated!')
+        
+        check_questionId_query = "SELECT * FROM questions WHERE questionId = %s"
+        cursor.execute(check_questionId_query, (questionId,))
+        if cursor.fetchone() is None:
+            return jsonify({"error": "Question not found"}), 404
+        
+        return jsonify({"message": "Question Updated!"}), 200
     
+    except Exception as e:
+        current_app.logger.error(f'Error updating question {questionId}: {str(e)}')
+        db.get_db().rollback()
+        return jsonify({"error": str(e)}), 500
     
-    query = '''
-        UPDATE question
-        SET text = %s
-        WHERE questionId = %s;
-    '''
-    data = {questionId, text}
-    cursor = db.get_db().cursor()
-    cursor.execute(query, data)
-    db.get_db().commit()
-    
-    return 'Question Updated!'
-
-#------------------------------------------------------------
-
