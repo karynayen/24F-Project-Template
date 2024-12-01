@@ -37,17 +37,17 @@ def edit_question(questionId):
         
         current_app.logger.info(f'Question {questionId} successfully updated!')
         
-        check_questionId_query = "SELECT * FROM questions WHERE questionId = %s"
+        check_questionId_query = 'SELECT * FROM questions WHERE questionId = %s'
         cursor.execute(check_questionId_query, (questionId,))
         if cursor.fetchone() is None:
-            return jsonify({"error": "Question not found"}), 404
+            return jsonify({'error': 'Question not found'}), 404
         
-        return jsonify({"message": "Question Updated!"}), 200
+        return jsonify({'message': 'Question Updated!'}), 200
     
     except Exception as e:
         current_app.logger.error(f'Error updating question {questionId}: {str(e)}')
         db.get_db().rollback()
-        return jsonify({"error": str(e)}), 500
+        return jsonify({'error': str(e)}), 500
     
 #------------------------------------------------------------
 # Delete questions
@@ -76,10 +76,9 @@ def delete_quesitons(questionId):
         cursor.execute(query, (questionId,))
         db.get_db().commit()
         current_app.logger.info(f'Question {questionId} successfully deleted!')
-        return jsonify({"message": "Question Deleted!"}), 200
+        return jsonify({'message': 'Question Deleted!'}), 200
     
     except Exception as e:
         current_app.logger.error(f'Error deleting question {questionId}: {str(e)}')
         db.get_db().rollback()
-        return jsonify({"error": str(e)}), 500
-                                
+        return jsonify({'error': str(e)}), 500
