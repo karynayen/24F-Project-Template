@@ -33,7 +33,7 @@ def get_college(collegeID):
 @colleges.route('/colleges/<int:collegeID>/reviews', methods=['GET'])
 def get_college_reviews(collegeID):
     query = '''
-        SELECT r.reviewID, r.text, r.rating, r.date
+        SELECT *
         FROM reviews r
         JOIN college c ON r.collegeID = c.collegeID
         WHERE c.collegeID = %s
