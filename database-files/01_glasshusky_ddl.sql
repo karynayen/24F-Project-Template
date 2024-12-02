@@ -364,7 +364,7 @@ INSERT INTO location (street, city, `state`, country, postcode) VALUES
 ('224 Chestnut Ln', 'Atlanta', 'GA', 'USA', 30301),
 ('335 Walnut Dr', 'Colorado Springs', 'CO', 'USA', 80901);
 
-#count = 40
+-- count = 40
 INSERT INTO reviewer (major, `name`, `num_co-ops`, `year`, bio, active) VALUES
 ('Computer Science', 'Alice Johnson', 2, 3, 'Passionate about AI and machine learning', TRUE),
 ('Mechanical Engineering', 'Bob Williams', 1, 2, 'Love designing and building robots', FALSE),
@@ -408,42 +408,49 @@ INSERT INTO reviewer (major, `name`, `num_co-ops`, `year`, bio, active) VALUES
 ('Game Design', 'Natalie Wood', 3, 4, 'Creating immersive VR experiences', TRUE);
 
 
+-- count = 35
 INSERT INTO reviews (positionID, companyID, authorID, title, `num_co-op`, rating, recommend, pay_type, pay, job_type, `text`, verified) VALUES
-(1, 1, 1, 'Great learning experience', 1, 4, TRUE, 'hourly', 25.50, 'Internship', 'I learned a lot during my time here. The team was supportive and the projects were challenging.', TRUE),
-(2, 2, 2, 'Challenging but rewarding', 2, 5, TRUE, 'salary', 75000.00, 'Full-time', 'The work was demanding but I grew professionally. Great company culture.', TRUE),
-(3, 3, 1, 'Excellent mentorship', 1, 5, TRUE, 'hourly', 30.00, 'Co-op', 'The mentors were fantastic. I gained valuable industry insights.', FALSE),
-(4, 4, 2, 'Fast-paced environment', 3, 4, TRUE, 'salary', 85000.00, 'Full-time', 'Always busy but in a good way. Lots of opportunities to take initiative.', TRUE),
-(5, 5, 1, 'Good work-life balance', 2, 4, TRUE, 'hourly', 22.00, 'Part-time', 'Flexible hours and understanding management. Great for students.', FALSE),
-(6, 6, 2, 'Innovative projects', 1, 5, TRUE, 'salary', 90000.00, 'Full-time', 'Worked on cutting-edge technology. Very exciting and fulfilling.', TRUE),
-(7, 7, 1, 'Supportive team', 1, 4, TRUE, 'hourly', 28.00, 'Internship', 'Everyone was willing to help. Great collaborative atmosphere.', FALSE),
-(8, 8, 2, 'Room for growth', 2, 4, TRUE, 'salary', 80000.00, 'Full-time', 'Many opportunities for professional development and advancement.', TRUE),
-(9, 9, 1, 'Valuable industry experience', 1, 5, TRUE, 'hourly', 26.50, 'Co-op', 'Gained practical skills that are highly relevant in the job market.', FALSE),
-(10, 10, 2, 'Competitive compensation', 3, 5, TRUE, 'salary', 95000.00, 'Full-time', 'Excellent pay and benefits package. Felt valued as an employee.', TRUE),
-(11, 11, 1, 'Interesting challenges', 2, 4, TRUE, 'hourly', 24.00, 'Part-time', 'Each day brought new and exciting problems to solve.', FALSE),
-(12, 12, 2, 'Great company culture', 1, 5, TRUE, 'salary', 82000.00, 'Full-time', 'Fun work environment with regular team-building activities.', TRUE),
-(13, 13, 1, 'Flexible work arrangements', 1, 4, TRUE, 'hourly', 27.00, 'Internship', 'Appreciated the option to work remotely when needed.', FALSE),
-(14, 14, 2, 'Strong leadership', 2, 5, TRUE, 'salary', 88000.00, 'Full-time', 'Management was transparent and provided clear direction.', TRUE),
-(15, 15, 1, 'Hands-on experience', 1, 4, TRUE, 'hourly', 23.50, 'Co-op', 'Got to work on real projects that impacted the business.', FALSE),
-(16, 16, 2, 'Collaborative environment', 3, 4, TRUE, 'salary', 78000.00, 'Full-time', 'Great teamwork and open communication across departments.', TRUE),
-(17, 17, 1, 'Learning opportunities', 2, 5, TRUE, 'hourly', 25.00, 'Part-time', 'Constant chances to learn new skills and technologies.', FALSE),
-(18, 18, 2, 'Impactful work', 1, 5, TRUE, 'salary', 92000.00, 'Full-time', 'Felt like my work was making a difference in the industry.', TRUE),
-(19, 19, 1, 'Supportive management', 1, 4, TRUE, 'hourly', 29.00, 'Internship', 'Managers were always available and willing to provide guidance.', FALSE),
-(20, 20, 2, 'Career growth', 2, 5, TRUE, 'salary', 86000.00, 'Full-time', 'Clear path for advancement within the company.', TRUE),
-(21, 21, 1, 'Diverse project exposure', 1, 4, TRUE, 'hourly', 26.00, 'Co-op', 'Worked on a variety of projects across different domains.', FALSE),
-(22, 22, 2, 'Innovative company', 3, 5, TRUE, 'salary', 98000.00, 'Full-time', "Always pushing the boundaries of what\'s possible in the industry.", TRUE),
-(23, 23, 1, 'Friendly colleagues', 2, 4, TRUE, 'hourly', 24.50, 'Part-time', 'Great people to work with, made coming to work enjoyable.', FALSE),
-(24, 24, 2, 'Professional development', 1, 5, TRUE, 'salary', 84000.00, 'Full-time', 'Company invested in employee growth through training and conferences.', TRUE),
-(25, 25, 1, 'Challenging projects', 1, 4, TRUE, 'hourly', 28.50, 'Internship', 'Assigned to complex projects that pushed me to grow.', FALSE),
-(26, 26, 2, 'Work-life balance', 2, 4, TRUE, 'salary', 79000.00, 'Full-time', 'Reasonable hours and respect for personal time.', TRUE),
-(27, 27, 1, 'Innovative technology', 1, 5, TRUE, 'hourly', 27.50, 'Co-op', 'Exposure to cutting-edge tools and technologies.', FALSE),
-(28, 28, 2, 'Inclusive workplace', 3, 5, TRUE, 'salary', 91000.00, 'Full-time', 'Diverse and welcoming environment for all employees.', TRUE),
-(29, 29, 1, 'Mentorship program', 2, 4, TRUE, 'hourly', 25.50, 'Part-time', 'Paired with experienced professionals for guidance.', FALSE),
+(1, 7, 7, 'Great learning experience', 1, 4, TRUE, 'hourly', 25.50, 'Internship', 'I learned a lot during my time here. The team was supportive and the projects were challenging.', TRUE),
+(2, 15, 15, 'Challenging but rewarding', 2, 5, TRUE, 'salary', 75000.00, 'Full-time', 'The work was demanding but I grew professionally. Great company culture.', TRUE),
+(3, 23, 23, 'Excellent mentorship', 1, 5, TRUE, 'hourly', 30.00, 'Co-op', 'The mentors were fantastic. I gained valuable industry insights.', FALSE),
+(4, 1, 31, 'Fast-paced environment', 3, 4, TRUE, 'salary', 85000.00, 'Full-time', 'Always busy but in a good way. Lots of opportunities to take initiative.', TRUE),
+(5, 9, 3, 'Good work-life balance', 2, 4, TRUE, 'hourly', 22.00, 'Part-time', 'Flexible hours and understanding management. Great for students.', FALSE),
+(6, 17, 19, 'Innovative projects', 1, 5, TRUE, 'salary', 90000.00, 'Full-time', 'Worked on cutting-edge technology. Very exciting and fulfilling.', TRUE),
+(7, 25, 11, 'Supportive team', 1, 4, TRUE, 'hourly', 28.00, 'Internship', 'Everyone was willing to help. Great collaborative atmosphere.', FALSE),
+(8, 3, 27, 'Room for growth', 2, 4, TRUE, 'salary', 80000.00, 'Full-time', 'Many opportunities for professional development and advancement.', TRUE),
+(9, 11, 35, 'Valuable industry experience', 1, 5, TRUE, 'hourly', 26.50, 'Co-op', 'Gained practical skills that are highly relevant in the job market.', FALSE),
+(10, 19, 5, 'Competitive compensation', 3, 5, TRUE, 'salary', 95000.00, 'Full-time', 'Excellent pay and benefits package. Felt valued as an employee.', TRUE),
+(11, 27, 13, 'Interesting challenges', 2, 4, TRUE, 'hourly', 24.00, 'Part-time', 'Each day brought new and exciting problems to solve.', FALSE),
+(12, 5, 29, 'Great company culture', 1, 5, TRUE, 'salary', 82000.00, 'Full-time', 'Fun work environment with regular team-building activities.', TRUE),
+(13, 13, 37, 'Flexible work arrangements', 1, 4, TRUE, 'hourly', 27.00, 'Internship', 'Appreciated the option to work remotely when needed.', FALSE),
+(14, 21, 9, 'Strong leadership', 2, 5, TRUE, 'salary', 88000.00, 'Full-time', 'Management was transparent and provided clear direction.', TRUE),
+(15, 29, 21, 'Hands-on experience', 1, 4, TRUE, 'hourly', 23.50, 'Co-op', 'Got to work on real projects that impacted the business.', FALSE),
+(16, 8, 33, 'Collaborative environment', 3, 4, TRUE, 'salary', 78000.00, 'Full-time', 'Great teamwork and open communication across departments.', TRUE),
+(17, 16, 1, 'Learning opportunities', 2, 5, TRUE, 'hourly', 25.00, 'Part-time', 'Constant chances to learn new skills and technologies.', FALSE),
+(18, 24, 17, 'Impactful work', 1, 5, TRUE, 'salary', 92000.00, 'Full-time', 'Felt like my work was making a difference in the industry.', TRUE),
+(19, 2, 25, 'Supportive management', 1, 4, TRUE, 'hourly', 29.00, 'Internship', 'Managers were always available and willing to provide guidance.', FALSE),
+(20, 10, 39, 'Career growth', 2, 5, TRUE, 'salary', 86000.00, 'Full-time', 'Clear path for advancement within the company.', TRUE),
+(21, 18, 6, 'Diverse project exposure', 1, 4, TRUE, 'hourly', 26.00, 'Co-op', 'Worked on a variety of projects across different domains.', FALSE),
+(22, 26, 14, 'Innovative company', 3, 5, TRUE, 'salary', 98000.00, 'Full-time', "Always pushing the boundaries of what\'s possible in the industry.", TRUE),
+(23, 4, 22, 'Friendly colleagues', 2, 4, TRUE, 'hourly', 24.50, 'Part-time', 'Great people to work with, made coming to work enjoyable.', FALSE),
+(24, 12, 30, 'Professional development', 1, 5, TRUE, 'salary', 84000.00, 'Full-time', 'Company invested in employee growth through training and conferences.', TRUE),
+(25, 20, 38, 'Challenging projects', 1, 4, TRUE, 'hourly', 28.50, 'Internship', 'Assigned to complex projects that pushed me to grow.', FALSE),
+(26, 28, 10, 'Work-life balance', 2, 4, TRUE, 'salary', 79000.00, 'Full-time', 'Reasonable hours and respect for personal time.', TRUE),
+(27, 6, 18, 'Innovative technology', 1, 5, TRUE, 'hourly', 27.50, 'Co-op', 'Exposure to cutting-edge tools and technologies.', FALSE),
+(28, 14, 26, 'Inclusive workplace', 3, 5, TRUE, 'salary', 91000.00, 'Full-time', 'Diverse and welcoming environment for all employees.', TRUE),
+(29, 22, 34, 'Mentorship program', 2, 4, TRUE, 'hourly', 25.50, 'Part-time', 'Paired with experienced professionals for guidance.', FALSE),
 (30, 30, 2, 'Competitive industry position', 1, 5, TRUE, 'salary', 89000.00, 'Full-time', 'Company is a leader in the field with a strong market presence.', TRUE),
-(1, 1, 2, 'Room for improvement', 1, 3, FALSE, 'hourly', 22.00, 'Internship', 'Some processes could be more efficient. Communication was lacking at times.', TRUE),
-(2, 2, 1, 'High pressure environment', 2, 3, FALSE, 'salary', 72000.00, 'Full-time', 'Very demanding workload with tight deadlines. Not for everyone.', TRUE),
-(3, 3, 2, 'Limited resources', 1, 3, FALSE, 'hourly', 26.00, 'Co-op', 'Often had to make do with outdated tools and technology.', FALSE),
-(4, 4, 1, 'Bureaucratic processes', 3, 2, FALSE, 'salary', 76000.00, 'Full-time', 'Too much red tape. Simple tasks took forever to complete.', TRUE),
-(5, 5, 2, 'Lack of direction', 2, 2, FALSE, 'hourly', 20.00, 'Part-time', 'Objectives were often unclear. Felt lost at times.', FALSE);
+(1, 7, 20, 'Room for improvement', 1, 3, FALSE, 'hourly', 22.00, 'Internship', 'Some processes could be more efficient. Communication was lacking at times.', TRUE),
+(2, 15, 28, 'High pressure environment', 2, 3, FALSE, 'salary', 72000.00, 'Full-time', 'Very demanding workload with tight deadlines. Not for everyone.', TRUE),
+(3, 23, 36, 'Limited resources', 1, 3, FALSE, 'hourly', 26.00, 'Co-op', 'Often had to make do with outdated tools and technology.', FALSE),
+(4, 1, 4, 'Bureaucratic processes', 3, 2, FALSE, 'salary', 76000.00, 'Full-time', 'Too much red tape. Simple tasks took forever to complete.', TRUE),
+(5, 9, 12, 'Lack of direction', 2, 2, FALSE, 'hourly', 20.00, 'Part-time', 'Objectives were often unclear. Felt lost at times.', FALSE);
+
+
+
+
+
+
 
 
 INSERT INTO questions (postId, author, `text`) VALUES
