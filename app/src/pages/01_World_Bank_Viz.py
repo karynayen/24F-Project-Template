@@ -41,30 +41,28 @@ st.write(f"### Hi, {st.session_state['first_name']}.")
 #                                 margins = False) 
 #     st.table(data_crosstab)
 
+# ======================================================================================================================
+
 #calling companies endpoint
 st.write("# Pulling all companies")
 
-"""
-Simply retrieving data from a REST api running in a separate Docker Container.
-
-If the container isn't running, this will be very unhappy.  But the Streamlit app 
-should not totally die. 
-"""
-co_data = {} 
+co_df = {} 
 try:
   #list of companyID, name, size
   co_data = requests.get('http://api:4000/co/companies').json()
-  co_data = pd.DataFrame(co_data)
+  co_df= pd.DataFrame(co_data)
 except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
-  co_data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
+  co_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-st.dataframe(co_data)
+st.dataframe(co_df)
 
-st.write("# Reviews for each company")
+# ======================================================================================================================
+
+st.write("# All reviews for each company sorted by companyID")
 reviews_df = pd.DataFrame()
 try:
-  companyID = co_data['companyID']
+  companyID = co_df['companyID']
   for id_num in companyID:
      response = requests.get(f'http://api:4000/co/companies/{id_num}/reviews').json()
      review = pd.DataFrame(response)
@@ -74,6 +72,21 @@ except:
   reviews_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
 st.dataframe(reviews_df)
+
+# ======================================================================================================================
+st.write("# Creating histograms of ratings for each company")
+
+
+#iterate through company dataframe and add in corresponding reviews
+for i in range(len(co_df['companyID'])):
+    co_rating_df = pd.DataFrame()
+    for n in range(len(reviews_df['companyID'])):
+        if co_df['companyID'].iloc[i] == reviews_df['companyID'].iloc[n]:
+           co_rating_df = pd.concat([co_rating_df, reviews_df.iloc[i]], axis =1, ignore_index = True)
+    st.write(f"# {co_df.loc[i, 'name']}")
+    st.write(f"### {co_df.loc[i, 'size']}") 
+
+    # st.table(co_rating_df)
 # with st.echo(code_location='above'):
 #     # arr = np.random.normal(1, 1, size=100)
 #     # test_plot, ax = plt.subplots()

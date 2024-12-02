@@ -447,12 +447,6 @@ INSERT INTO reviews (positionID, companyID, authorID, title, `num_co-op`, rating
 (5, 9, 12, 'Lack of direction', 2, 2, FALSE, 'hourly', 20.00, 'Part-time', 'Objectives were often unclear. Felt lost at times.', FALSE);
 
 
-
-
-
-
-
-
 INSERT INTO questions (postId, author, `text`) VALUES
 (1, 'Emily Chen', 'What skills did you find most valuable during your internship?'),
 (1, 'Michael Johnson', 'How was the work-life balance during your time at the company?'),
