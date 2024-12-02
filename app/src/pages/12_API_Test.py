@@ -1,3 +1,4 @@
+
 import logging
 logger = logging.getLogger(__name__)
 import streamlit as st
@@ -23,33 +24,3 @@ except:
   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
 st.dataframe(data)
-
-# New section to test positions routes
-st.write("## Positions Data")
-
-positions_data = {}
-try:
-    positions_data = requests.get('http://api:4000/po/positions').json()
-except:
-    st.write("**Important**: Could not connect to positions API, so using dummy data.")
-    positions_data = [
-        {"positionID": 1, "companyID": 1, "name": "Software Engineer", "description": "Develop and maintain software applications", "remote": True},
-        {"positionID": 2, "companyID": 2, "name": "Data Analyst", "description": "Analyze and interpret complex data sets", "remote": False}
-    ]
-
-st.dataframe(positions_data)
-
-# New section to test colleges routes
-st.write("## Colleges Data")
-
-colleges_data = {}
-try:
-    colleges_data = requests.get('http://api:4000/co/colleges').json()
-except:
-    st.write("**Important**: Could not connect to colleges API, so using dummy data.")
-    colleges_data = [
-        {"collegeID": 1, "name": "Evergreen State University"},
-        {"collegeID": 2, "name": "Redwood Technical Institute"}
-    ]
-
-st.dataframe(colleges_data)
