@@ -364,7 +364,7 @@ INSERT INTO location (street, city, `state`, country, postcode) VALUES
 ('224 Chestnut Ln', 'Atlanta', 'GA', 'USA', 30301),
 ('335 Walnut Dr', 'Colorado Springs', 'CO', 'USA', 80901);
 
-
+#count = 40
 INSERT INTO reviewer (major, `name`, `num_co-ops`, `year`, bio, active) VALUES
 ('Computer Science', 'Alice Johnson', 2, 3, 'Passionate about AI and machine learning', TRUE),
 ('Mechanical Engineering', 'Bob Williams', 1, 2, 'Love designing and building robots', FALSE),
