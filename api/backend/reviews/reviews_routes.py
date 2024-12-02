@@ -47,27 +47,26 @@ def get_reviews():
     return response
 #---------------------------------------------------
 # Add a new review to the system
-@reviews.route('/review', methods=['POST'])
+@reviews.route('/reviews', methods=['POST'])
 def add_new_review():
 
     the_data = request.json
     current_app.logger.info(the_data)
 
-    positionID = the_data['review_positionID']
-    companyID = the_data['review_companyID']
-    authorID = the_data['review_authorID']
-    title = the_data['review_title']
-    rating = the_data['review_rating']
-    recommend = the_data['review_recommend']
-    pay_type = the_data['review_pay_type']
-    pay = the_data['review_pay']
-    job_type = the_data['review_job_type']
-    date_time = the_data['review_date_time']
-    verified = the_data['review_verified']
-    text = the_data['review_text']
+    positionID = the_data['positionID']
+    companyID = the_data['companyID']
+    authorID = the_data['authorID']
+    title = the_data['title']
+    rating = the_data['rating']
+    recommend = the_data['recommend']
+    pay_type = the_data['pay_type']
+    pay = the_data['pay']
+    job_type = the_data['job_type']
+    verified = the_data['verified']
+    text = the_data['text']
 
     query = f'''
-        INSERT INTO reviews (position_ID,
+        INSERT INTO reviews (positionID,
                              companyID,
                              authorID,
                              title,
@@ -76,13 +75,12 @@ def add_new_review():
                              pay_type,
                              pay,
                              job_type,
-                             date_time,
                              verified,
                              text)
         VALUES ('{str(positionID)}', '{str(companyID)}', '{str(authorID)}',
-                '{title}', '{str(rating)}', '{str(recommend)}',
-                '{pay_type}', '{str(pay)}', '{job_type}', '{date_time}',
-                '{str(verified)}', '{text}')
+                '{title}', '{str(rating)}', '{recommend}',
+                '{pay_type}', '{str(pay)}', '{job_type}',
+                '{verified}', '{text}')
     '''
     
     current_app.logger.info(query)
@@ -115,7 +113,7 @@ def update_review():
 
 #-------------------------------------------------------------------
 # Delete a review from the system
-@reviews.route('/review', methods=['DELETE'])
+@reviews.route('/reviews', methods=['DELETE'])
 def delete_review():
     current_app.logger.info('DELETE /review route')
     rev_info = request.json
@@ -170,7 +168,7 @@ def update_specific_review(reviewID):
 def get_review_questions(reviewID):
     current_app.logger.info('GET /reviews/<reviewID>/questions route')
     query = f'''
-        SELECT * FROM questions WHERE reviewID = {reviewID}
+        SELECT * FROM questions WHERE postID = {reviewID}
     '''
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -189,15 +187,15 @@ def add_review_question(reviewID):
     the_data = request.json
     current_app.logger.info(the_data)
 
-    postID = the_data[reviewID]
-    author = the_data['questions_author']
-    text = the_data['questions_text']
+    postId = reviewID
+    author = the_data['author']
+    text = the_data['text']
 
     query = f'''
         INSERT INTO questions (postId,
                                author,
                                text)
-        VALUES ('{postID}', '{author}', '{text}')
+        VALUES ('{postId}', '{author}', '{text}')
     '''
 
     current_app.logger.info(query)
@@ -212,11 +210,11 @@ def add_review_question(reviewID):
 
 #-----------------------------------------------------------------
 # Get all answers associated with a specific review
-@reviews.route('/reviews/<reviewID/answers', methods=['GET'])
+@reviews.route('/reviews/<reviewID>/answers', methods=['GET'])
 def get_review_answers(reviewID):
     current_app.logger.info('GET /reviews/<reviewID>/answers route')
     query = f'''
-        SELECT * FROM answers WHERE reviewID = {reviewID}
+        SELECT * FROM answers WHERE postID = {reviewID}
     '''
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -235,17 +233,17 @@ def add_review_answer(reviewID):
     the_data = request.json
     current_app.logger.info(the_data)
 
-    postID = the_data[reviewID]
-    questionID = the_data['answers_questionId']
-    author = the_data['answers_author']
-    text = the_data['answers_text']
+    postId = reviewID
+    questionId = the_data['questionId']
+    author = the_data['author']
+    text = the_data['text']
 
     query = f'''
         INSERT INTO questions (postId,
-                               questionId
+                               questionId,
                                author,
                                text)
-        VALUES ('{postID}', '{questionID}', '{author}', '{text}')
+        VALUES ('{postId}', '{questionId}', '{author}', '{text}')
     '''
 
     current_app.logger.info(query)
