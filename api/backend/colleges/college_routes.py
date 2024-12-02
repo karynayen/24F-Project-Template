@@ -29,6 +29,22 @@ def get_college(collegeID):
         response.status_code = 404
     return response
 
+# Get all reviews for a specific college
+@colleges.route('/colleges/<int:collegeID>/reviews', methods=['GET'])
+def get_college_reviews(collegeID):
+    query = '''
+        SELECT r.reviewID, r.text, r.rating, r.date
+        FROM reviews r
+        JOIN college c ON r.collegeID = c.collegeID
+        WHERE c.collegeID = %s
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (collegeID,))
+    reviews_data = cursor.fetchall()
+    response = make_response(jsonify(reviews_data))
+    response.status_code = 200
+    return response
+
 # Add a new college
 @colleges.route('/colleges', methods=['POST'])
 def add_college():
