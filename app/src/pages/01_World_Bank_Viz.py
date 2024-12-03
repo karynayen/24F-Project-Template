@@ -14,60 +14,63 @@ import requests
 SideBarLinks()
 
 # set the header of the page
-st.header('Company')
+st.header('Company Ratings')
 
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
+st.write("Here are all of the reviews for each company and a bar plot to show the rating distributions")
 
-# # get the countries from the world bank data
-# with st.echo(code_location='above'):
-#     countries:pd.DataFrame = wb.get_countries()
-   
-#     st.dataframe(countries)
+# Side bar for filtering companies
+st.sidebar.header('User Input Parameters')
 
-# # the with statment shows the code for this block above it 
-# with st.echo(code_location='above'):
-#     arr = np.random.normal(1, 1, size=100)
-#     test_plot, ax = plt.subplots()
-#     ax.hist(arr, bins=20)
+# Sidebar UI for choosing company size
+st.sidebar.header("Company Size")
+company_size = st.sidebar.radio(
+    "Select the size of the company:",
+    options=["0+", "0-499", "500-999", "1000-4999", "5000-9999", "10000+"],
+    index=3
+)
 
-#     st.pyplot(test_plot)
+size_ranges = {
+    "0+": (0, float("inf")),
+    "0-499": (0, 500),
+    "500-999": (500, 1000),
+    "1000-4999": (1000, 5000),
+    "5000-9999": (5000, 10000),
+    "10000+": (10000, float("inf"))
+}
 
-
-# with st.echo(code_location='above'):
-#     slim_countries = countries[countries['incomeLevel'] != 'Aggregates']
-#     data_crosstab = pd.crosstab(slim_countries['region'], 
-#                                 slim_countries['incomeLevel'],  
-#                                 margins = False) 
-#     st.table(data_crosstab)
+selected_range = size_ranges[company_size]
 
 # ======================================================================================================================
 
-#calling all companies
-st.write("Pulling all companies")
+# calling all companies to put data into a pandas dataframe
 
-company_df = {} 
 try:
   #List of: city, companyID, country, industryname (i.name), industryID, locID, 
   #companyname (name), postcode, size, state, street 
   co_data = requests.get('http://api:4000/co/companies').json()
   company_df= pd.DataFrame(co_data)
+  filtered_co_df = company_df[(company_df["size"] >= selected_range[0]) & (company_df["size"] < selected_range[1])]
+
 except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
-  company_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
+  filtered_co_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-st.dataframe(company_df)
+# st.dataframe(filtered_co_df)
 
 # Retrieve each company's ID, name, and size since there were duplicates in company_df for future iterations over the data
-unique_company = company_df[['companyID', 'name', 'size']].drop_duplicates()
+unique_company = filtered_co_df[['companyID', 'name', 'size']].drop_duplicates()
 
 # ======================================================================================================================
 
-st.write("All reviews for each company sorted by companyID")
+#matching company reviews with each company using companyID
+
 reviews_df = pd.DataFrame()
 try:
   # iterates through companyIDs and adds matching reviews to 1 large dataframe
   for id_num in unique_company['companyID']:
+     # calls the get request
      response = requests.get(f'http://api:4000/co/companies/{id_num}/reviews').json()
      review = pd.DataFrame(response)
      reviews_df = pd.concat([reviews_df, review], axis =0, ignore_index = True)
@@ -75,23 +78,12 @@ except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   reviews_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-st.dataframe(reviews_df)
+# st.dataframe(reviews_df)
 
 # ======================================================================================================================
 
-#iterate through company dataframe and add in corresponding reviews
-# for i in range(len(unique_coID)):
-#     co_review_df = pd.DataFrame()
-#     for n in range(len(reviews_df['companyID'])):
-#         if unique_coID[i] == reviews_df['companyID'].iloc[n]:
-#            st.write(f'{unique_coID[i]}, {reviews_df["companyID"].iloc[n]}')
-#            co_review_df = pd.concat([co_review_df, reviews_df.iloc[n]], axis =1, ignore_index = True)
-#     st.write(f"# {unique_company[i]}")
-#     # st.write(f"### {company_df.loc[i, 'size']}") 
-#     st.table(co_review_df)
-
-
-st.write("## Company Information and Reviews")
+# st.write("# Company Ratings")
+# st.write()
 
 # Getting company information: name, city/state, industry, size
 for _, row in unique_company.iterrows():
@@ -110,8 +102,8 @@ for _, row in unique_company.iterrows():
    
     # Formatting data to be more readable
     st.markdown(
-    f"**Company:** {name}  \n"
-    f"**City/State:** {', '.join([f'{city}, {state}' for city, state in city_state])}  \n"
+    f"### **{name}**  \n"
+    f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  \n"
     f"**Industry:** {', '.join(industry)}  \n"
     f"**Size:** {size}"
 )
@@ -123,27 +115,36 @@ for _, row in unique_company.iterrows():
     # Iterate through reviews_df
     for n in range(len(reviews_df['companyID'])):
         #match companyID from reviews_df to companyID from the unique company df
-        if coID == reviews_df['companyID'].iloc[n]:
-           #add review corresponding to matching company to dataframe of company reviews~ co_review_df
-           co_review_df = pd.concat([co_review_df, reviews_df.iloc[n]], axis =1, ignore_index = True)
+        co_review_df = reviews_df[reviews_df['companyID'] == coID].copy()
+
+    expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 
+                       'recommend', 'text', 'verified']
+    matching_columns = co_review_df[expected_labels]
     
-    # Display only specific labels which are the indices for the rows
-    expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 'recommend', 'text', 'verified']
-    matching_rows = co_review_df.loc[expected_labels]
+    # Display the reviews with only the rows of interest
+    st.write("#### **Reviews**")
+    st.table(matching_columns)
 
-    # Display the selected rows
-    st.table(matching_rows)
-    
+# Bar plots for rating distribution
 
+    # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        fig, ax = plt.subplots(figsize=(4, 2))
+        # x axis = rating values
+        # y axis = rating value frequency
+        ax.bar(matching_columns['rating'].value_counts().index, 
+               matching_columns['rating'].value_counts().values,
+               width = 0.5)
+        
+        # plot design
+        ax.set_title('Company Ratings')
+        ax.set_xlabel('Rating')
+        ax.set_ylabel('Frequency')
+        ax.grid(axis='y')
+        ax.set_xticks(matching_columns['rating'].value_counts().index)
+        ax.set_ylim(0, max(matching_columns['rating'].value_counts().values) + 1)
+        ax.set_xlim(0, 6)
 
-
-    
-# with st.echo(code_location='above'):
-#     # arr = np.random.normal(1, 1, size=100)
-#     # test_plot, ax = plt.subplots()
-#     # ax.hist(arr, bins=20)
-
-#     # st.pyplot(test_plot)
-#     # companies_df = pd.DataFrame(data)
-#     company1_df = data[0] #data = list of companyID, Name, size
-#     st.dataframe(company1_df)
+        # displaying the plot
+        st.pyplot(fig)
