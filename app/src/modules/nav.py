@@ -21,9 +21,9 @@ def PolStratAdvHomeNav():
     )
 
 
-def WorldBankVizNav():
+def CompanyRatingsNav():
     st.sidebar.page_link(
-        "pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon="🏦"
+        "pages/01_Company_Ratings.py", label="Company Ratings", icon="🏦"
     )
 
 
@@ -77,11 +77,12 @@ def SideBarLinks(show_home=False):
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
 
-        # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
+        # Show "Company Ratings" Link and "General Ratings By Major" Link if the user is a ANALYST role.
         if st.session_state["role"] == "analyst":
             PolStratAdvHomeNav()
-            WorldBankVizNav()
+            CompanyRatingsNav()
             MapDemoNav()
+            
 
         # If the user role is usaid worker, show the Api Testing page
         if st.session_state["role"] == "usaid_worker":
