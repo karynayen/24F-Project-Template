@@ -44,6 +44,18 @@ selected_range = size_ranges[company_size]
 
 # ======================================================================================================================
 
+# Create the sort by dropdown
+col1, col2 = st.columns([3, 1])
+with col2:
+    sort_by = st.selectbox(
+        'Sort By:',
+        ('Company Size Asc', 'Company Size Desc', 'Overall Rating Desc', 'Overall Rating Asc', 'Number of Reviews'),
+        label_visibility='collapsed',
+        index =2
+    )
+
+# ======================================================================================================================
+
 # calling all companies to put data into a pandas dataframe
 
 try:
@@ -53,6 +65,7 @@ try:
   company_df= pd.DataFrame(co_data)
   filtered_co_df = company_df[(company_df["size"] >= selected_range[0]) & (company_df["size"] < selected_range[1])]
 
+  
 except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   filtered_co_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
@@ -66,6 +79,7 @@ unique_company = filtered_co_df[['companyID', 'name', 'size']].drop_duplicates()
 
 #matching company reviews with each company using companyID
 
+#df for all reviews in the database
 reviews_df = pd.DataFrame()
 try:
   # iterates through companyIDs and adds matching reviews to 1 large dataframe
@@ -80,71 +94,89 @@ except:
 
 # st.dataframe(reviews_df)
 
+#adding overall average rating to unique companies for sorting
+or_df = reviews_df[['companyID', 'rating']]
+mean_rating_ls = []
+for _, row in unique_company.iterrows():
+    coID = row['companyID']
+    ratings_df = or_df[or_df['companyID'] == coID].copy()
+    mean_rating_ls.append(ratings_df['rating'].mean())
+unique_company['Overall Rating'] = mean_rating_ls
+ # Use the sort_by value to sort your dataframe
+if sort_by == 'Company Size Desc':
+    unique_company = unique_company.sort_values('size', ascending=False)
+elif sort_by == 'Company Size Asc':
+    unique_company = unique_company.sort_values('size', ascending=True)
+elif sort_by == 'Overall Rating Asc':
+    unique_company = unique_company.sort_values('Overall Rating', ascending=True)
+elif sort_by == 'Overall Rating Desc':
+    unique_company = unique_company.sort_values('Overall Rating', ascending=False)
+st.dataframe(unique_company)
 # ======================================================================================================================
 
-# st.write("# Company Ratings")
-# st.write()
+# # st.write("# Company Ratings")
+# # st.write()
 
-# Getting company information: name, city/state, industry, size
-for _, row in unique_company.iterrows():
-    # Extract company details
-    coID = row['companyID']
-    name = row['name']
-    size = row['size']
+# # Getting company information: name, city/state, industry, size
+# for _, row in unique_company.iterrows():
+#     # Extract company details
+#     coID = row['companyID']
+#     name = row['name']
+#     size = row['size']
 
-    # Filter rows for the current company
-    matching_rows = company_df[company_df['companyID'] == coID]
+#     # Filter rows for the current company
+#     matching_rows = company_df[company_df['companyID'] == coID]
     
-    # Extract unique values for city/state and industry
-    city_state = matching_rows[['city', 'state']].drop_duplicates().values.tolist()
-    industry = matching_rows['i.name'].unique() 
+#     # Extract unique values for city/state and industry
+#     city_state = matching_rows[['city', 'state']].drop_duplicates().values.tolist()
+#     industry = matching_rows['i.name'].unique() 
     
    
-    # Formatting data to be more readable
-    st.markdown(
-    f"### **{name}**  \n"
-    f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  \n"
-    f"**Industry:** {', '.join(industry)}  \n"
-    f"**Size:** {size}"
-)
+#     # Formatting data to be more readable
+#     st.markdown(
+#     f"### **{name}**  \n"
+#     f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  \n"
+#     f"**Industry:** {', '.join(industry)}  \n"
+#     f"**Size:** {size}"
+# )
 
-# Matching reviews to Company
+# # Matching reviews to Company
 
-    # Initialize empty df
-    co_review_df = pd.DataFrame()
-    # Iterate through reviews_df
-    for n in range(len(reviews_df['companyID'])):
-        #match companyID from reviews_df to companyID from the unique company df
-        co_review_df = reviews_df[reviews_df['companyID'] == coID].copy()
+#     # Initialize empty df
+#     co_review_df = pd.DataFrame()
+#     # Iterate through reviews_df
+#     for n in range(len(reviews_df['companyID'])):
+#         #match companyID from reviews_df to companyID from the unique company df
+#         co_review_df = reviews_df[reviews_df['companyID'] == coID].copy()
 
-    expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 
-                       'recommend', 'text', 'verified']
-    matching_columns = co_review_df[expected_labels]
+#     expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 
+#                        'recommend', 'text', 'verified']
+#     matching_columns = co_review_df[expected_labels]
     
-    # Display the reviews with only the rows of interest
-    st.write("#### **Reviews**")
-    st.table(matching_columns)
+#     # Display the reviews with only the rows of interest
+#     st.write("#### **Reviews**")
+#     st.table(matching_columns)
 
-# Bar plots for rating distribution
+# # Bar plots for rating distribution
 
-    # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        fig, ax = plt.subplots(figsize=(4, 2))
-        # x axis = rating values
-        # y axis = rating value frequency
-        ax.bar(matching_columns['rating'].value_counts().index, 
-               matching_columns['rating'].value_counts().values,
-               width = 0.5)
+#     # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
+#     col1, col2, col3 = st.columns([1, 2, 1])
+#     with col2:
+#         fig, ax = plt.subplots(figsize=(4, 2))
+#         # x axis = rating values
+#         # y axis = rating value frequency
+#         ax.bar(matching_columns['rating'].value_counts().index, 
+#                matching_columns['rating'].value_counts().values,
+#                width = 0.5)
         
-        # plot design
-        ax.set_title('Company Ratings')
-        ax.set_xlabel('Rating')
-        ax.set_ylabel('Frequency')
-        ax.grid(axis='y')
-        ax.set_xticks(matching_columns['rating'].value_counts().index)
-        ax.set_ylim(0, max(matching_columns['rating'].value_counts().values) + 1)
-        ax.set_xlim(0, 6)
+#         # plot design
+#         ax.set_title('Company Ratings')
+#         ax.set_xlabel('Rating')
+#         ax.set_ylabel('Frequency')
+#         ax.grid(axis='y')
+#         ax.set_xticks(matching_columns['rating'].value_counts().index)
+#         ax.set_ylim(0, max(matching_columns['rating'].value_counts().values) + 1)
+#         ax.set_xlim(0, 6)
 
-        # displaying the plot
-        st.pyplot(fig)
+#         # displaying the plot
+#         st.pyplot(fig)
