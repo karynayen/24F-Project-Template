@@ -44,26 +44,30 @@ st.write(f"### Hi, {st.session_state['first_name']}.")
 # ======================================================================================================================
 
 #calling companies endpoint
-st.write("# Pulling all companies")
+st.write("Pulling all companies")
 
-co_df = {} 
+company_df = {} 
 try:
-  #list of companyID, name, size
+  #list of city, companyID, country, industryname (i.name), industryID, locID, 
+  # companyname (name), postcode, size, state, street 
   co_data = requests.get('http://api:4000/co/companies').json()
-  co_df= pd.DataFrame(co_data)
+  company_df= pd.DataFrame(co_data)
 except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
-  co_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
+  company_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-st.dataframe(co_df)
+st.dataframe(company_df)
 
+# unique_company = company_df['name'].unique()
+# unique_coID = company_df['companyID'].unique()
+unique_company = company_df[['companyID', 'name', 'size']].drop_duplicates()
 # ======================================================================================================================
 
-st.write("# All reviews for each company sorted by companyID")
+st.write("All reviews for each company sorted by companyID")
 reviews_df = pd.DataFrame()
 try:
-  companyID = co_df['companyID']
-  for id_num in companyID:
+  for id_num in unique_company['companyID']:
+#   for id_num in unique_coID:
      response = requests.get(f'http://api:4000/co/companies/{id_num}/reviews').json()
      review = pd.DataFrame(response)
      reviews_df = pd.concat([reviews_df, review], axis =0, ignore_index = True)
@@ -74,19 +78,74 @@ except:
 st.dataframe(reviews_df)
 
 # ======================================================================================================================
-st.write("# Creating histograms of ratings for each company")
-
 
 #iterate through company dataframe and add in corresponding reviews
-for i in range(len(co_df['companyID'])):
-    co_rating_df = pd.DataFrame()
-    for n in range(len(reviews_df['companyID'])):
-        if co_df['companyID'].iloc[i] == reviews_df['companyID'].iloc[n]:
-           co_rating_df = pd.concat([co_rating_df, reviews_df.iloc[i]], axis =1, ignore_index = True)
-    st.write(f"# {co_df.loc[i, 'name']}")
-    st.write(f"### {co_df.loc[i, 'size']}") 
+# for i in range(len(unique_coID)):
+#     co_review_df = pd.DataFrame()
+#     for n in range(len(reviews_df['companyID'])):
+#         if unique_coID[i] == reviews_df['companyID'].iloc[n]:
+#            st.write(f'{unique_coID[i]}, {reviews_df["companyID"].iloc[n]}')
+#            co_review_df = pd.concat([co_review_df, reviews_df.iloc[n]], axis =1, ignore_index = True)
+#     st.write(f"# {unique_company[i]}")
+#     # st.write(f"### {company_df.loc[i, 'size']}") 
+#     st.table(co_review_df)
 
-    # st.table(co_rating_df)
+
+st.write("## Company Information and Reviews")
+
+# Getting company information: name, city/state, industry, size
+for _, row in unique_company.iterrows():
+    # Extract company details
+    coID = row['companyID']
+    name = row['name']
+    size = row['size']
+    # Filter rows for the current company
+    matching_rows = company_df[company_df['companyID'] == coID]
+    
+    # Extract unique values for city/state and industry
+    city_state = matching_rows[['city', 'state']].drop_duplicates().values.tolist()
+    industry = matching_rows['i.name'].unique() 
+    
+    # # Create a DataFrame to structure the data
+    # data = {
+    #     'Company': [name],
+    #     'City/State': [', '.join([f'{city}, {state}' for city, state in city_state])],
+    #     'Industry': [', '.join(industry)],
+    #     'Size': [size]
+    # }
+    # df = pd.DataFrame(data)
+    # formatting data to be more readable
+    st.markdown(
+    f"**Company:** {name}  \n"
+    f"**City/State:** {', '.join([f'{city}, {state}' for city, state in city_state])}  \n"
+    f"**Industry:** {', '.join(industry)}  \n"
+    f"**Size:** {size}"
+)
+
+
+# Matching reviews to Company
+
+    #initialize empty df
+    co_review_df = pd.DataFrame()
+    #iterate through reviews_df
+    for n in range(len(reviews_df['companyID'])):
+        #match companyID from reviews_df to companyID from the unique company df
+        if coID == reviews_df['companyID'].iloc[n]:
+           #add review corresponding to matching company to dataframe of company reviews~ co_review_df
+           co_review_df = pd.concat([co_review_df, reviews_df.iloc[n]], axis =1, ignore_index = True)
+    
+    #display only specific labels which are the indices for the rows
+    expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 'recommend', 'text', 'verified']
+    matching_rows = co_review_df.loc[expected_labels]
+
+    # Display the selected rows
+    st.table(matching_rows)
+    # st.table(co_review_df)
+
+
+
+
+    
 # with st.echo(code_location='above'):
 #     # arr = np.random.normal(1, 1, size=100)
 #     # test_plot, ax = plt.subplots()
