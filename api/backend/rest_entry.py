@@ -5,8 +5,12 @@ from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.companies.companies_routes import companies
 from backend.simple.simple_routes import simple_routes
+from backend.reviews.reviews_routes import reviews
+from backend.positions.positions_routes import positions
+from backend.colleges.college_routes import colleges
 from backend.industries.industries_routes import industries
 from backend.reviewers.reviewers_routes import reviewers
+
 import os
 from dotenv import load_dotenv
 
@@ -43,12 +47,14 @@ def create_app():
     # and give a url prefix to each
     app.logger.info('current_app(): registering blueprints with Flask app object.')   
     app.register_blueprint(simple_routes)
+    app.register_blueprint(reviews,     url_prefix='/r')
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
     app.register_blueprint(companies,   url_prefix='/co')
+    app.register_blueprint(positions,   url_prefix='/po')
+    app.register_blueprint(colleges,    url_prefix='/co')
     app.register_blueprint(industries,   url_prefix='/i')
     app.register_blueprint(reviewers,   url_prefix='/rver')
 
     # Don't forget to return the app object
     return app
-
