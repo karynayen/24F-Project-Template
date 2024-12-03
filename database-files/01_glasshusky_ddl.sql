@@ -176,8 +176,7 @@ INSERT INTO `college` (`name`) VALUES
 ('College of Professional Studies'),
 ('College of Science'),
 ('College of Social Sciences and Humanities'),
-('Northeastern University School of Law'),
-('College of Professional Studies');
+('Northeastern University School of Law');
 
 
 
@@ -583,5 +582,3 @@ INSERT INTO `positionTargetCollege` (collegeID, positionID) VALUES
 
 -- Northeastern University School of Law (ID: 8)
 (8, 10), (8, 14), (8, 18), (8, 22), (8, 26),
-
-(9, 10);
