@@ -24,7 +24,7 @@ if st.button('View World Map Demo',
              use_container_width=True):
   st.switch_page('pages/02_Map_Demo.py')
 
-if st.button('View General Ratings By Major', 
+if st.button('View General Ratings By College', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/05_General_Ratings_By_Major.py')
+  st.switch_page('pages/05_General_Ratings_By_College.py')

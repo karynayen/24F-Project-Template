@@ -16,7 +16,7 @@ from modules.nav import SideBarLinks
 SideBarLinks()
 
 # set the header of the page
-st.header('General Ratings By Major')
+st.header('General Ratings By College')
 
 
 # You can access the session state to make a more customized/personalized app experience
