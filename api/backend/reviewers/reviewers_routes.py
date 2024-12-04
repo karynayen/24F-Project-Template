@@ -71,10 +71,11 @@ def add_new_reviewer():
     response.status_code = 200
     return response
 
-@reviewers.route('/reviewers/<reviewerID>', methods=['PUT'])
-def update_reviewer(reviewerID):
+@reviewers.route('/reviewers', methods=['PUT'])
+def update_reviewer():
     current_app.logger.info('PUT /reviewers/<reviewerID> route')
     reviewer_info = request.json
+    reviewerID = reviewer_info['reviewerID']
     major = reviewer_info['major']
     name = reviewer_info['name']
     num_coops = reviewer_info['num_co-ops']
@@ -83,8 +84,19 @@ def update_reviewer(reviewerID):
     active = reviewer_info['active']
 
     query = 'UPDATE company SET major = %s, name = %s, num_co-ops  = %s, year  = %s, bio  = %s, active  = %s where reviewerID = %s'
-    data = (major, name, num_coops, year, bio, active)
+    data = (major, name, num_coops, year, bio, active, reviewerID)
     cursor = db.get_db().cursor()
     r = cursor.execute(query, data)
     db.get_db().commit()
     return 'reviewer updated!'
+
+# Delete a reviewer
+@reviewers.route('/reviewers/<int:reviewerID>', methods=['DELETE'])
+def delete_reviewer(reviewerID):
+    query = 'DELETE FROM industry WHERE reviewerID = %s'
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (reviewerID,))
+    db.get_db().commit()
+    response = make_response(jsonify({"message": "Industry deleted successfully"}))
+    response.status_code = 200
+    return response
