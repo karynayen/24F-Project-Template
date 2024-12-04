@@ -67,7 +67,6 @@ try:
   company_df= pd.DataFrame(co_data)
   filtered_co_df = company_df[(company_df["size"] >= selected_range[0]) & (company_df["size"] < selected_range[1])]
 
-  
 except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   filtered_co_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
@@ -133,6 +132,7 @@ st.write("# Company Ratings")
 # st.write()
 
 # Getting company information: name, city/state, industry, size
+rank = 1
 for _, row in unique_company.iterrows():
     # Extract company details
     coID = row['companyID']
@@ -151,14 +151,14 @@ for _, row in unique_company.iterrows():
    
     # Formatting data to be more readable
     st.markdown(
-    f"### **{name}**  \n"
+    f"### **{rank}. {name}**  \n"
     f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  \n"
     f"**Industry:** {', '.join(industry)}  \n"
     f"**Size:** {size}  \n"
     f"**Overall Rating:** {mean_rating}  \n"
     f"**Number of Ratings:** {num_ratings}"
-)
-
+    )
+    rank += 1
 # Matching reviews to Company
 
     # Initialize empty df
@@ -199,3 +199,4 @@ for _, row in unique_company.iterrows():
 
         # displaying the plot
         st.pyplot(fig)
+    

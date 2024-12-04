@@ -112,7 +112,7 @@ def add_new_industry():
 def update_industry():
     current_app.logger.info('PUT /industries/<industryID> route')
     industry_info = request.json
-    industryID = reviewer_info['industryID']
+    industryID = industry_info['industryID']
     name = industry_info['name']
 
     query = 'UPDATE industry SET name = %s where industryID = %s'
