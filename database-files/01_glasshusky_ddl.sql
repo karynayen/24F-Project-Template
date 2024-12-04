@@ -581,4 +581,4 @@ INSERT INTO `positionTargetCollege` (collegeID, positionID) VALUES
 (7, 6), (7, 9), (7, 11), (7, 14), (7, 17), (7, 22), (7, 25),
 
 -- Northeastern University School of Law (ID: 8)
-(8, 10), (8, 14), (8, 18), (8, 22), (8, 26),
+(8, 10), (8, 14), (8, 18), (8, 22), (8, 26);
