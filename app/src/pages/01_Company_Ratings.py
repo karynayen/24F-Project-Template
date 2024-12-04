@@ -65,8 +65,12 @@ try:
   #companyname (name), postcode, size, state, street 
   co_data = requests.get('http://api:4000/co/companies').json()
   company_df= pd.DataFrame(co_data)
-  filtered_co_df = company_df[(company_df["size"] >= selected_range[0]) & (company_df["size"] < selected_range[1])]
-
+  filtered_co_df = company_df[(company_df["size"] >= selected_range[0]) & 
+                              (company_df["size"] < selected_range[1])]
+  if filtered_co_df.empty:
+     st.warning("No companies found within the selected size range. Please adjust your filters.")
+     st.stop()
+  
 except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   filtered_co_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
@@ -150,14 +154,29 @@ for _, row in unique_company.iterrows():
     
    
     # Formatting data to be more readable
-    st.markdown(
-    f"### **{rank}. {name}**  \n"
-    f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  \n"
-    f"**Industry:** {', '.join(industry)}  \n"
-    f"**Size:** {size}  \n"
-    f"**Overall Rating:** {mean_rating}  \n"
-    f"**Number of Ratings:** {num_ratings}"
-    )
+    col1, col2 = st.columns([1, 1])  # Define two columns with relative widths
+    with col1:  # Left column for rank, name, and locations
+      st.markdown(
+        f"### **{rank}. {name}**  \n"
+        f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  "
+        )
+    with col2:  # Right column for size
+      st.markdown(
+        f"<br><br>**Overall Rating:** {mean_rating}", 
+        unsafe_allow_html=True
+        )
+
+    col3, col4 = st.columns([1, 1])  # Create another row for industry and rating info
+    with col3:  # Left column for industry
+      st.markdown(
+        f"**Industry:** {', '.join(industry)}  \n"
+        f"**Size:** {size}"
+        )
+    with col4:  # Right column for overall rating
+      st.markdown(
+        f"**Number of Ratings:** {num_ratings}"
+        )
+
     rank += 1
 # Matching reviews to Company
 
