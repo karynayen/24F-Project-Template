@@ -191,7 +191,7 @@ for _, row in unique_company.iterrows():
         # plot design
         ax.set_title('Company Ratings')
         ax.set_xlabel('Rating')
-        ax.set_ylabel('Frequency')
+        ax.set_ylabel('Count')
         ax.grid(axis='y')
         ax.set_xticks(matching_columns['rating'].value_counts().index)
         ax.set_ylim(0, max(matching_columns['rating'].value_counts().values) + 1)
