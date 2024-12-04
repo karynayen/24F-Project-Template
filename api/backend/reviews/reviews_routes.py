@@ -17,6 +17,7 @@ reviews = Blueprint('reviews', __name__)
 # Get all reviews from the system
 @reviews.route('/reviews', methods=['GET'])
 def get_reviews():
+    authorID = request.args.get('authorID')
     query = '''
         SELECT reviewID,
                positionID,
@@ -33,17 +34,17 @@ def get_reviews():
                text
         FROM reviews
     '''
-
-    cursor = db.get_db().cursor()
-
-    cursor.execute(query)
-
+    if authorID:
+        query += ' WHERE authorID = %s'
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (authorID,))
+    else:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+    
     theData = cursor.fetchall()
-
     response = make_response(jsonify(theData))
-
     response.status_code = 200
-
     return response
 #---------------------------------------------------
 # Add a new review to the system
@@ -112,19 +113,14 @@ def update_review():
     return 'review updated!'
 
 #-------------------------------------------------------------------
-# Delete a review from the system
-@reviews.route('/reviews', methods=['DELETE'])
-def delete_review():
-    current_app.logger.info('DELETE /review route')
-    rev_info = request.json
-    rev_id = rev_info['reviewID']
-
+@reviews.route('/reviews/<reviewID>', methods=['DELETE'])
+def delete_review(reviewID):
+    current_app.logger.info(f'DELETE /reviews/{reviewID} route')
     query = 'DELETE FROM reviews WHERE reviewID = %s'
-    data = (rev_id)
     cursor = db.get_db().cursor()
-    r = cursor.execute(query, data)
+    cursor.execute(query, (reviewID,))
     db.get_db().commit()
-    return 'review removed!'
+    return jsonify({'message': 'Review deleted successfully'}), 200
 
 #--------------------------------------------------------------------
 # Get a specific review based on reviewID from the system
@@ -255,3 +251,20 @@ def add_review_answer(reviewID):
     response = make_response('Successfully added answer')
     response.status_code = 200
     return response
+
+#----------------------------------------------------------------------
+
+# Get all reviews by a given authorID
+@reviews.route('/reviews/<authorID>', methods=['GET'])
+def get_reviews_by_author(authorID):
+    query = f'''
+        SELECT * FROM reviews WHERE authorID = {authorID}
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (authorID,))
+    theData = cursor.fetchall()
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
+
+#----------------------------------------------------------------------
