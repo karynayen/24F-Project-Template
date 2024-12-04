@@ -83,7 +83,7 @@ def add_new_industry():
     current_app.logger.info(the_data)
 
     #extracting the variable
-    name = the_data['industry_name']
+    name = the_data['name']
     
     query = '''
         INSERT INTO `industry` (name)
