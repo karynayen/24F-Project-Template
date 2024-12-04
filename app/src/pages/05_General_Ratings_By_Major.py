@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 
 import requests
@@ -29,23 +30,52 @@ try:
     for college in college_data:
         with st.container(border=True):
             st.write(f"##### {college['name']} Ratings:")
-            college_positions = requests.get('http://api:4000/col/colleges/' + str(college['collegeID']) + '/reviews').json()
 
+            # Api calls to get the reviews, questions, and answers for a specific college
+            college_positions = requests.get('http://api:4000/col/colleges/' + str(college['collegeID']) + '/reviews').json()
             answers = requests.get('http://api:4000/col/colleges/' + str(college['collegeID']) + '/reviews/answers').json()
             questions = requests.get('http://api:4000/col/colleges/' + str(college['collegeID']) + '/reviews/questions').json()
 
             answer_count = len(answers)
             question_count = len(questions)
-            # st.dataframe(college_positions)
-            all_ratings = []
-            for position in college_positions:
-                all_ratings.append(position['rating'])
+
+            all_ratings = list(map(lambda position: position['rating'], college_positions))
             average_rating = round(np.mean(all_ratings), 2) or None
 
-            all_dates = []
-            for position in college_positions:
-                all_dates.append(position['date_time'])
+            all_dates = list(map(lambda position: position['date_time'], college_positions))
+
+            # Group the ratings by semester
+            semester_buckets = {}
+            for date, rating in zip(all_dates, all_ratings):
+                datem = datetime.strptime(date, "%a, %d %b %Y %H:%M:%S %Z")
+                year = datem.year
+                month = datem.month
+                if month >= 8 and month <= 12:
+                    semester = 'Fall ' + str(year)
+                elif month >= 1 and month <= 4:
+                    semester = 'Spring ' + str(year)
+                else:
+                    semester = 'Summer ' + str(year)
+                if semester in semester_buckets:
+                    semester_buckets[semester].append(rating)
+                else:
+                    semester_buckets[semester] = [rating]
+
+            semester_averages = {}
+            for semester, ratings in semester_buckets.items():
+                semester_averages[semester] = round(np.mean(ratings), 2)
+            
+            # all sememester sorted in ascending order by year and then Spring, Summer, Fall 
+            sorted_semesters = sorted(
+                semester_averages.keys(),
+                key=lambda x: (int(x.split(' ')[1]), 0 if x.split(' ')[0] == 'Spring' else 1 if x.split(' ')[0] == 'Summer' else 2))
+
+            sorted_ratings = []
+            for semester in sorted_semesters:
+                sorted_ratings.append(semester_averages[semester])
+
             col1, col2 = st.columns([1, 3])
+            
             with col1:
                 with st.container(border=True):
                     st.write('#### Average Rating:')
@@ -53,11 +83,17 @@ try:
                     st.write('Total Reviews:', str(len(all_ratings)))
                     st.write('Total Questions:', str(question_count))
                     st.write('Total Answers:', str(answer_count))
+                    
             with col2:
                 with st.container(border=True):
-                    fig = px.histogram(all_ratings, x=all_dates, title='Ratings Distribution Over Time')
+                    chart_data = {
+                        'ratings': sorted_ratings,
+                        'semesters': sorted_semesters
+                    }
+                    df = pd.DataFrame(chart_data)
+                    fig = px.histogram(df, x="semesters", y="ratings", title='Ratings Distribution Over Time')
                     st.plotly_chart(fig, key=str(college['collegeID']))
-
+                    
 except:
     st.write("Error rendering page")
 
