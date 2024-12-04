@@ -56,7 +56,7 @@ def create_app():
     app.register_blueprint(questions,   url_prefix='/q')
     app.register_blueprint(answers,     url_prefix='/a')
     app.register_blueprint(positions,   url_prefix='/po')
-    app.register_blueprint(colleges,    url_prefix='/co')
+    app.register_blueprint(colleges,    url_prefix='/col')
     app.register_blueprint(industries,   url_prefix='/i')
     app.register_blueprint(reviewers,   url_prefix='/rver')
 
