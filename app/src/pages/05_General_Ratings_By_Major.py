@@ -55,9 +55,6 @@ try:
                     st.write('Total Answers:', str(answer_count))
             with col2:
                 with st.container(border=True):
-                    # fig = px.histogram(all_ratings, x=all_ratings, title='Ratings Distribution')
-                    # st.plotly_chart(fig)
-                    # TODO add a range of dates
                     fig = px.histogram(all_ratings, x=all_dates, title='Ratings Distribution Over Time')
                     st.plotly_chart(fig, key=str(college['collegeID']))
 
