@@ -107,3 +107,13 @@ def add_new_industry():
     response = make_response("Successfully added industry")
     response.status_code = 200
     return response
+
+@industries.route('/industries/<int:industryID>', methods=['DELETE'])
+def delete_position(industryID):
+    query = 'DELETE FROM industry WHERE industryID = %s'
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (industryID,))
+    db.get_db().commit()
+    response = make_response(jsonify({"message": "Industry deleted successfully"}))
+    response.status_code = 200
+    return response
