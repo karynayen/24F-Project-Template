@@ -27,8 +27,6 @@ def create_company_card(company_data, reviews):
             with col1:
                 if company_data['name'] == 'TechNova Solutions':
                     st.write(f"# 🌋")
-                elif company_data['name'] == 'Newton':
-                    st.image("newton_logo.png", width=50)
             with col2:
                 st.write(f"# {company_data['name']}")
                 
