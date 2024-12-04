@@ -19,7 +19,15 @@ companies = Blueprint('companies', __name__)
 # Get all companies from the system
 @companies.route('/companies', methods=['GET'])
 def get_companies(): 
-    query = 'SELECT * FROM company'
+    query = '''
+        SELECT *
+        FROM company c
+        JOIN companylocation cl ON c.companyID = cl.companyID
+        JOIN location l ON cl.locID = l.locID
+        JOIN companyIndustry ci ON c.companyID = ci.companyID
+        JOIN industry i ON ci.industryID = i.industryID
+        '''
+    
     cursor = db.get_db().cursor()
     cursor.execute(query)
     theData = cursor.fetchall()
@@ -198,6 +206,7 @@ def get_company_positions_reviews_answers(companyID, positionID):
 
 #------------------------------------------------------------
 # Delete a company from the system
+# Note due to foreign key constraints, you can only delete a company if it has no other references
 @companies.route('/companies/<companyID>', methods=['DELETE'])
 def delete_company(companyID):
     current_app.logger.info('DELETE /companies/<companyID> route')
