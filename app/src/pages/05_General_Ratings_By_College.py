@@ -61,19 +61,21 @@ try:
                 else:
                     semester_buckets[semester] = [rating]
 
-            semester_averages = {}
+            semester_total_ratings = {}
             for semester, ratings in semester_buckets.items():
-                semester_averages[semester] = round(np.mean(ratings), 2)
+                semester_total_ratings[semester] = (len(ratings), round(np.mean(ratings), 2))
             
             # all sememester sorted in ascending order by year and then Spring, Summer, Fall 
             sorted_semesters = sorted(
-                semester_averages.keys(),
+                semester_total_ratings.keys(),
                 key=lambda x: (int(x.split(' ')[1]), 0 if x.split(' ')[0] == 'Spring' else 1 if x.split(' ')[0] == 'Summer' else 2))
 
-            sorted_ratings = []
+            sorted_ratings_count = []
+            sorted_ratings_avg = []
             for semester in sorted_semesters:
-                sorted_ratings.append(semester_averages[semester])
-
+                sorted_ratings_count.append(semester_total_ratings[semester][0])
+                sorted_ratings_avg.append(semester_total_ratings[semester][1])
+            
             col1, col2 = st.columns([1, 3])
             
             with col1:
@@ -87,13 +89,18 @@ try:
             with col2:
                 with st.container(border=True):
                     chart_data = {
-                        'ratings': sorted_ratings,
+                        'ratings': sorted_ratings_count,
+                        'average_ratings': sorted_ratings_avg,
                         'semesters': sorted_semesters
                     }
                     df = pd.DataFrame(chart_data)
-                    fig = px.histogram(df, x="semesters", y="ratings", title='Ratings Distribution Over Time')
+                    fig = px.histogram(
+                        df, 
+                        x="semesters", 
+                        y="ratings", 
+                        title='Number of Reviews Per Semester'
+                    )
                     st.plotly_chart(fig, key=str(college['collegeID']))
-                    
 except:
     st.write("Error rendering page")
 
