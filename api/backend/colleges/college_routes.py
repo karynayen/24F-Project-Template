@@ -35,15 +35,57 @@ def get_college_reviews(collegeID):
     query = '''
         SELECT *
         FROM reviews r
-        JOIN college c ON r.collegeID = c.collegeID
+        JOIN position p ON r.positionID = p.positionID
+        JOIN positionTargetCollege ptc ON p.positionID = ptc.positionID
+        JOIN college c ON ptc.collegeID = c.collegeID
         WHERE c.collegeID = %s
     '''
     cursor = db.get_db().cursor()
-    cursor.execute(query, (collegeID,))
+    cursor.execute(query, (collegeID))
     reviews_data = cursor.fetchall()
     response = make_response(jsonify(reviews_data))
     response.status_code = 200
     return response
+
+# Get all questions for a specific college
+@colleges.route('/colleges/<int:collegeID>/reviews/questions', methods=['GET'])
+def get_college_reviews_questions(collegeID):
+    query = '''
+        SELECT *
+        FROM college c 
+            JOIN positionTargetCollege ptc ON c.collegeID = ptc.collegeID
+            JOIN position p ON ptc.positionID = p.positionID
+            JOIN reviews r ON p.positionID = r.positionID
+            JOIN questions q ON r.reviewID = q.postId
+        WHERE c.collegeID = %s
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (collegeID))
+    questions_data = cursor.fetchall()
+    response = make_response(jsonify(questions_data))
+    response.status_code = 200
+    return response
+
+# Get all answers for a specific college
+@colleges.route('/colleges/<int:collegeID>/reviews/answers', methods=['GET'])
+def get_college_reviews_answers(collegeID):
+    query = '''
+        SELECT *
+        FROM college c 
+            JOIN positionTargetCollege ptc ON c.collegeID = ptc.collegeID
+            JOIN position p ON ptc.positionID = p.positionID
+            JOIN reviews r ON p.positionID = r.positionID
+            JOIN answers a ON r.reviewID = a.postId
+        WHERE c.collegeID = %s
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (collegeID))
+    answers_data = cursor.fetchall()
+    response = make_response(jsonify(answers_data))
+    response.status_code = 200
+    return response
+
+
 
 # Add a new college
 @colleges.route('/colleges', methods=['POST'])
