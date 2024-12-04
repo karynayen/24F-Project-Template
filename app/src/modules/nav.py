@@ -26,10 +26,6 @@ def CompanyRatingsNav():
         "pages/01_Company_Ratings.py", label="Company Ratings", icon="🏦"
     )
 
-
-def MapDemoNav():
-    st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
-
 def GeneralRatingsNav():
     st.sidebar.page_link("pages/05_General_Ratings_By_College.py", label="General Ratings", icon="🗺️")
 
@@ -84,7 +80,6 @@ def SideBarLinks(show_home=False):
         if st.session_state["role"] == "analyst":
             AnalaystHomeNav()
             CompanyRatingsNav()
-            MapDemoNav()
             GeneralRatingsNav()
             
 

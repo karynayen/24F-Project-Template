@@ -19,11 +19,6 @@ if st.button('View Company Ratings',
              use_container_width=True):
   st.switch_page('pages/01_Company_Ratings.py')
 
-if st.button('View World Map Demo', 
-             type='primary',
-             use_container_width=True):
-  st.switch_page('pages/02_Map_Demo.py')
-
 if st.button('View General Ratings By College', 
              type='primary',
              use_container_width=True):
