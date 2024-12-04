@@ -50,7 +50,7 @@ def create_app():
     app.register_blueprint(reviews,     url_prefix='/r')
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
-    app.register_blueprint(companies,   url_prefix='/co')
+    app.register_blueprint(companies,   url_prefix='/com')
     app.register_blueprint(positions,   url_prefix='/po')
     app.register_blueprint(colleges,    url_prefix='/co')
     app.register_blueprint(industries,   url_prefix='/i')
