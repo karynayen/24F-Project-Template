@@ -72,9 +72,8 @@ def get_industry(industryID):
 
 
 # ------------------------------------------------------------
-# This is a POST route to add a new product.
-# Remember, we are using POST routes to create new entries
-# in the database. 
+# This is a POST route to add a new industry.
+# Remember, we are using POST routes to create new entries in the database. 
 @industries.route('/industries', methods=['POST'])
 def add_new_industry():
     
@@ -107,3 +106,30 @@ def add_new_industry():
     response = make_response("Successfully added industry")
     response.status_code = 200
     return response
+
+# update an industry
+@industries.route('/industries', methods=['PUT'])
+def update_industry():
+    current_app.logger.info('PUT /industries/<industryID> route')
+    industry_info = request.json
+    industryID = industry_info['industryID']
+    name = industry_info['name']
+
+    query = 'UPDATE industry SET name = %s where industryID = %s'
+    data = (name, industryID)
+    cursor = db.get_db().cursor()
+    r = cursor.execute(query, data)
+    db.get_db().commit()
+    return 'industry updated!'
+
+# delete an industry
+@industries.route('/industries/<int:industryID>', methods=['DELETE'])
+def delete_position(industryID):
+    query = 'DELETE FROM industry WHERE industryID = %s'
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (industryID,))
+    db.get_db().commit()
+    response = make_response(jsonify({"message": "Industry deleted successfully"}))
+    response.status_code = 200
+    return response
+

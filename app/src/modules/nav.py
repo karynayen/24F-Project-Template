@@ -15,20 +15,23 @@ def AboutPageNav():
 
 
 #### ------------------------ Examples for Role of analyst ------------------------
-def PolStratAdvHomeNav():
+def AnalaystHomeNav():
     st.sidebar.page_link(
         "pages/00_Analyst_Home.py", label="Analyst Home", icon="👤"
     )
 
 
-def WorldBankVizNav():
+def CompanyRatingsNav():
     st.sidebar.page_link(
-        "pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon="🏦"
+        "pages/01_Company_Ratings.py", label="Company Ratings", icon="🏦"
     )
 
 
 def MapDemoNav():
     st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
+
+def GeneralRatingsNav():
+    st.sidebar.page_link("pages/05_General_Ratings_By_Major.py", label="General Ratings By Major", icon="🗺️")
 
 
 ## ------------------------ Examples for Role of usaid_worker ------------------------
@@ -77,11 +80,13 @@ def SideBarLinks(show_home=False):
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
 
-        # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
+        # Show "Company Ratings" Link and "General Ratings By Major" Link if the user is a ANALYST role.
         if st.session_state["role"] == "analyst":
-            PolStratAdvHomeNav()
-            WorldBankVizNav()
+            AnalaystHomeNav()
+            CompanyRatingsNav()
             MapDemoNav()
+            GeneralRatingsNav()
+            
 
         # If the user role is usaid worker, show the Api Testing page
         if st.session_state["role"] == "usaid_worker":
