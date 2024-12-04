@@ -169,36 +169,14 @@ CREATE TABLE IF NOT EXISTS answers (
 );
 
 INSERT INTO `college` (`name`) VALUES
-('Evergreen State University'),
-('Redwood Technical Institute'),
-('Sunnyvale College'),
-('Meadowbrook University'),
-('Stonebridge Academy'),
-('Silverleaf Institute'),
-('Oakridge College'),
-('Willow Creek University'),
-('Pinehurst Academy'),
-('Maple Grove Institute'),
-('Birchwood University'),
-('Cypress College'),
-('Aspen Heights Academy'),
-('Cedar Ridge University'),
-('Magnolia Institute'),
-('Juniper Hills College'),
-('Sycamore Valley University'),
-('Elm Street Academy'),
-('Hawthorn Technical College'),
-('Chestnut Ridge University'),
-('Laurel Springs Institute'),
-('Rosewood College'),
-('Spruce Mountain University'),
-('Poplar Grove Academy'),
-('Hemlock Institute'),
-('Acacia University'),
-('Dogwood Technical College'),
-('Sequoia State University'),
-('Beechwood College'),
-('Alder Creek Institute');
+('Khoury College of Computer Sciences'),
+("D'amore Mckim"),
+('Bouve College of Health Sciences'),
+('College of Arts, Media and Design'),
+('College of Professional Studies'),
+('College of Science'),
+('College of Social Sciences and Humanities'),
+('Northeastern University School of Law');
 
 
 
@@ -590,24 +568,28 @@ INSERT INTO `companyIndustry` (industryID, companyID) VALUES
 (20, 1), (20, 17), (20, 4), (20, 21), (20, 9);
 
 INSERT INTO `positionTargetCollege` (collegeID, positionID) VALUES
-(1, 1), (2, 1), (3, 1), (4, 1), (5, 1),
-(1, 2), (2, 2), (3, 2), (4, 2), (5, 2),
-(6, 3), (7, 3), (8, 3), (9, 3), (10, 3),
-(6, 4), (7, 4), (8, 4), (9, 4), (10, 4),
-(11, 5), (12, 5), (13, 5), (14, 5), (15, 5),
-(11, 6), (12, 6), (13, 6), (14, 6), (15, 6),
-(16, 7), (17, 7), (18, 7), (19, 7), (20, 7),
-(16, 8), (17, 8), (18, 8), (19, 8), (20, 8),
-(21, 9), (22, 9), (23, 9), (24, 9), (25, 9),
-(21, 10), (22, 10), (23, 10), (24, 10), (25, 10),
-(26, 11), (27, 11), (28, 11), (29, 11), (30, 11),
-(26, 12), (27, 12), (28, 12), (29, 12), (30, 12),
-(1, 13), (2, 13), (3, 13), (4, 13), (5, 13),
-(1, 14), (2, 14), (3, 14), (4, 14), (5, 14),
-(6, 15), (7, 15), (8, 15), (9, 15), (10, 15),
-(6, 16), (7, 16), (8, 16), (9, 16), (10, 16),
-(11, 17), (12, 17), (13, 17), (14, 17), (15, 17),
-(11, 18), (12, 18), (13, 18), (14, 18), (15, 18),
-(16, 19), (17, 19), (18, 19), (19, 19), (20, 19),
-(16, 20), (17, 20), (18, 20), (19, 20), (20, 20);
+-- Khoury College of Computer Sciences (ID: 1)
+(1, 1), (1, 2), (1, 3), (1, 7), (1, 11), (1, 13), (1, 15), (1, 18), (1, 19), (1, 21),
+(1, 23), (1, 24), (1, 27), (1, 28),
 
+-- D'Amore-McKim School of Business (ID: 2)
+(2, 3), (2, 4), (2, 5), (2, 6), (2, 11), (2, 12), (2, 17), (2, 20), (2, 22), (2, 26), 
+(2, 28), (2, 29),
+
+-- Bouvé College of Health Sciences (ID: 3)
+(3, 5), (3, 8), (3, 9), (3, 13), (3, 14), (3, 19), (3, 21), (3, 29),
+
+-- College of Arts, Media and Design (ID: 4)
+(4, 4), (4, 6), (4, 14), (4, 16), (4, 20), (4, 22), (4, 25), (4, 30),
+
+-- College of Professional Studies (ID: 5)
+(5, 7), (5, 12), (5, 15), (5, 22), (5, 23), (5, 26),
+
+-- College of Science (ID: 6)
+(6, 1), (6, 8), (6, 16), (6, 18), (6, 19), (6, 20), (6, 24),
+
+-- College of Social Sciences and Humanities (ID: 7)
+(7, 6), (7, 9), (7, 11), (7, 14), (7, 17), (7, 22), (7, 25),
+
+-- Northeastern University School of Law (ID: 8)
+(8, 10), (8, 14), (8, 18), (8, 22), (8, 26),
