@@ -154,68 +154,69 @@ for _, row in unique_company.iterrows():
     
    
     # Formatting data to be more readable
-    col1, col2 = st.columns([1, 1])  # Define two columns with relative widths
-    with col1:  # Left column for rank, name, and locations
-      st.markdown(
-        f"### **{rank}. {name}**  \n"
-        f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  "
-        )
-    with col2:  # Right column for size
-      st.markdown(
-        f"<br><br>**Overall Rating:** {mean_rating}", 
-        unsafe_allow_html=True
-        )
+    with st.container(border = True):
+        col1, col2 = st.columns([1, 1])  # Define two columns with relative widths
+        with col1:  # Left column for rank, name, and locations
+            st.markdown(
+                f"### **{rank}. {name}**  \n"
+                f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  "
+                )
+        with col2:  # Right column for size
+            st.markdown(
+                f"<br><br>**Overall Rating:** {mean_rating}/5", 
+                unsafe_allow_html=True
+                )
 
-    col3, col4 = st.columns([1, 1])  # Create another row for industry and rating info
-    with col3:  # Left column for industry
-      st.markdown(
-        f"**Industry:** {', '.join(industry)}  \n"
-        f"**Size:** {size}"
-        )
-    with col4:  # Right column for overall rating
-      st.markdown(
-        f"**Number of Ratings:** {num_ratings}"
-        )
+        col3, col4 = st.columns([1, 1])  # Create another row for industry and rating info
+        with col3:  # Left column for industry
+            st.markdown(
+                f"**Industries:** {', '.join(industry)}  \n"
+                f"**Size:** {size}"
+                )
+        with col4:  # Right column for overall rating
+            st.markdown(
+                f"**Number of Ratings:** {num_ratings}"
+                )
+        rank += 1
 
-    rank += 1
-# Matching reviews to Company
+        # Matching reviews to Company
 
-    # Initialize empty df
-    co_review_df = pd.DataFrame()
-    # Iterate through reviews_df
-    for n in range(len(reviews_df['companyID'])):
-        #match companyID from reviews_df to companyID from the unique company df
-        co_review_df = reviews_df[reviews_df['companyID'] == coID].copy()
+        # Initialize empty df
+        co_review_df = pd.DataFrame()
+            # Iterate through reviews_df
+        for n in range(len(reviews_df['companyID'])):
+            #match companyID from reviews_df to companyID from the unique company df
+            co_review_df = reviews_df[reviews_df['companyID'] == coID].copy()
 
-    expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 
-                       'recommend', 'text', 'verified']
-    matching_columns = co_review_df[expected_labels]
-    
-    # Display the reviews with only the rows of interest
-    st.write("#### **Reviews**")
-    st.table(matching_columns)
+            expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 
+                            'recommend', 'text', 'verified']
+            matching_columns = co_review_df[expected_labels]
+            
+            # Display the reviews with only the rows of interest
+            # st.write("#### **Reviews**")
+            # st.table(matching_columns)
 
-# Bar plots for rating distribution
+        # Bar plots for rating distribution
 
-    # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        fig, ax = plt.subplots(figsize=(4, 2))
-        # x axis = rating values
-        # y axis = rating value frequency
-        ax.bar(matching_columns['rating'].value_counts().index, 
-               matching_columns['rating'].value_counts().values,
-               width = 0.5)
-        
-        # plot design
-        ax.set_title('Company Ratings')
-        ax.set_xlabel('Rating')
-        ax.set_ylabel('Count')
-        ax.grid(axis='y')
-        ax.set_xticks(matching_columns['rating'].value_counts().index)
-        ax.set_ylim(0, max(matching_columns['rating'].value_counts().values) + 1)
-        ax.set_xlim(0, 6)
+        # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
+        with st.expander("Histogram of Rating Distribution- Click to expand", expanded=False):
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                fig, ax = plt.subplots(figsize=(4, 2))
+                # x axis = rating values
+                # y axis = rating value frequency
+                ax.bar(matching_columns['rating'].value_counts().index, 
+                    matching_columns['rating'].value_counts().values,
+                    width = 0.5)
+                    
+                # plot design
+                ax.set_title('Company Ratings')
+                ax.set_xlabel('Rating')
+                ax.set_ylabel('Count')
+                ax.grid(axis='y')
+                ax.set_xticks(matching_columns['rating'].value_counts().index)
+                ax.set_ylim(0, max(matching_columns['rating'].value_counts().values) + 1)
+                ax.set_xlim(0, 6)
 
-        # displaying the plot
-        st.pyplot(fig)
-    
+                # displaying the plot
+                st.pyplot(fig)
