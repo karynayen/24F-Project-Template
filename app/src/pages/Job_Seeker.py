@@ -20,4 +20,4 @@ if st.button('Find Jobs!',
 if st.button('Look at Questions',
              type='primary',
              use_container_width=True):
-    st.swtich_page('')
+    st.switch_page('pages/07_See_Questions.py')
