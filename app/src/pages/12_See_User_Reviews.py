@@ -59,7 +59,7 @@ def main():
                 recommend = st.checkbox("Recommend", value=review['recommend'], key=f"recommend_{review['reviewID']}")
                 pay_type = st.selectbox("Pay Type:", ["hourly", "salary"], index=["hourly", "salary"].index(review['pay_type']), key=f"pay_type_{review['reviewID']}")
                 pay = st.number_input("Pay:", min_value=0.0, format="%.2f", value=review['pay'], key=f"pay_{review['reviewID']}")
-                job_type = st.selectbox("Job Type:", ["Internship", "Co-op", "Full-time", "Part Time", "Other"])
+                job_type = st.selectbox("Job Type:", ["Internship", "Co-op", "Full-time", "Part Time", "Other"], key=f"job_type_{review['reviewID']}")
                 text = st.text_area("Review Text:", value=review['text'], key=f"text_{review['reviewID']}")
                 
                 if st.button(f"Delete Review {review['reviewID']}", key=f"delete_{review['reviewID']}"):
