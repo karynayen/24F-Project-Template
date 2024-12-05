@@ -103,7 +103,7 @@ with st.form('delete_answer_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/co/companies').json()
+    response = requests.get('http://api:4000/co/companies_simple').json()
 
     st.dataframe(response)
 
