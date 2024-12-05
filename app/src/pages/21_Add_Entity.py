@@ -95,7 +95,7 @@ with st.form('add_industry_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    companyData = requests.get('http://api:4000/co/companies').json()
+    companyData = requests.get('http://api:4000/co/companies_simple').json()
 
     st.dataframe(companyData)
 

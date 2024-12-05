@@ -13,7 +13,7 @@ st.title('Update Entities')
 st.write('\n\n')
 
 try:
-    response = requests.get('http://api:4000/co/companies').json()
+    response = requests.get('http://api:4000/co/companies_simple').json()
 
     st.dataframe(response)
 
