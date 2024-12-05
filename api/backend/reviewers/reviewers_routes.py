@@ -75,6 +75,7 @@ def add_new_reviewer():
     # return response
     return response
 
+# updates a reviewer's information
 @reviewers.route('/reviewers', methods=['PUT'])
 def update_reviewer():
     current_app.logger.info('PUT /reviewers/<reviewerID> route')
