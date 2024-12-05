@@ -14,7 +14,7 @@ import requests
 SideBarLinks()
 
 # set the header of the page
-st.header('Company Ratings')
+st.markdown("# Company Ratings")
 
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
@@ -129,7 +129,7 @@ elif sort_by == 'Number of Ratings Asc':
 
 # ======================================================================================================================
 
-st.write("# Company Ratings")
+# st.write("# Company Ratings")
 
 rank = 1
 for _, row in unique_company.iterrows():
