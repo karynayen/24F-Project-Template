@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 SideBarLinks()
 
 # # Set the header of the page
-st.header('Search Reviews')
+st.header('Questions')
 
 def get_answers(questionID):
     
@@ -37,15 +37,16 @@ def get_questions(reviewID, post_num):
     try:
         questions = pd.DataFrame(questions)
         with st.container(border=True):
-            st.write(f"Post {post_num + 1}")
+            st.write(f"**Review Post {post_num + 1}**")
             for i in range(len(questions)):
                 with st.expander(f"Question {i + 1}: {questions['Question'][i]['text']}", expanded=False):
                     with st.container(border=True):
-                        # st.write(questions['Question'][i]['text'])
+                        
                         get_answers(i)
         
     except:
         with st.container(border=True):
+            st.write(f"**Review Post {post_num + 1}**")
             st.write("No questions yet!")
     
 
@@ -54,10 +55,11 @@ def get_reviews(company_info, j):
     companyID = company_info['companyID']
     reviews = pd.DataFrame(requests.get(f"http://api:4000/co/companies/{companyID}/reviews").json()).loc[:, ['title', 'text', 'reviewID']]
     
-    
+    st.write(f"#### **{company_info['name']}**")
+
     for i in range(len(reviews)):
         reviewID = reviews['reviewID'][i]
-        get_questions(reviewID, j)
+        get_questions(reviewID, i)
     
     return(reviews)
     
