@@ -147,18 +147,30 @@ def get_review(reviewID):
 def update_specific_review(reviewID):
     current_app.logger.info('PUT /reviews/<reviewID> route')
     rev_info = request.json
+    title = rev_info['title']
     rating = rev_info['rating']
-    verified = rev_info['verified']
+    recommend = rev_info['recommend']
+    pay_type = rev_info['pay_type']
+    pay = rev_info['pay']
+    job_type = rev_info['job_type']
     text = rev_info['text']
+    verified = rev_info['verified']
 
-    query = 'UPDATE reviews SET rating = %s, verified = %s, text = %s where reviewID = %s'
-    data = (rating, verified, text, reviewID)
+    query = '''
+        UPDATE reviews
+        SET title = %s, rating = %s, recommend = %s, pay_type = %s, pay = %s, job_type = %s, text = %s, verified = %s
+        WHERE reviewID = %s
+    '''
+    data = (title, rating, recommend, pay_type, pay, job_type, text, verified, reviewID)
     cursor = db.get_db().cursor()
-    r = cursor.execute(query, data)
+    cursor.execute(query, data)
     db.get_db().commit()
-    return 'review updated!'
+    response = make_response(jsonify({"message": "Review updated successfully"}))
+    response.status_code = 200
+    return response
 
 #----------------------------------------------------------------------
+
 # Get all questions associated with a specific review
 @reviews.route('/reviews/<reviewID>/questions', methods=['GET'])
 def get_review_questions(reviewID):
@@ -177,6 +189,7 @@ def get_review_questions(reviewID):
     return response
 
 #----------------------------------------------------------------------
+
 # Add a new question to a specific review
 @reviews.route('/reviews/<reviewID>/questions', methods=['POST'])
 def add_review_question(reviewID):
@@ -223,6 +236,7 @@ def get_review_answers(reviewID):
     return response
 
 #-------------------------------------------------------------------
+
 # Add a new answer to a specific review
 @reviews.route('/reviews/<reviewID>/answers', methods=['POST'])
 def add_review_answer(reviewID):

@@ -9,7 +9,8 @@ def get_company_names():
         response = requests.get('http://api:4000/co/companies')
         response.raise_for_status()
         companies = response.json()
-        return [{"name": company['name'], "companyID": company['companyID']} for company in companies]
+        unique_company_names = {company['name']: company['companyID'] for company in companies}
+        return [{"name": name, "companyID": companyID} for name, companyID in unique_company_names.items()]
     except requests.exceptions.RequestException as e:
         st.error(f"Failed to fetch company data: {e}")
         return []

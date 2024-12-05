@@ -10,7 +10,7 @@ def get_company_names():
         response.raise_for_status()
         companies = response.json()
         unique_company_names = {company['name'] for company in companies}
-        return list(unique_company_names)
+        return sorted(list(unique_company_names))
     except requests.exceptions.RequestException as e:
         st.error(f"Failed to fetch company data: {e}")
         return []
@@ -51,30 +51,6 @@ def get_position_id_by_name(position_name):
         st.error(f"Failed to fetch position data: {e}")
         return None
 
-def create_position(company_id, position_name, remote):
-    position_data = {
-        "companyID": company_id,
-        "name": position_name,
-        "description": "New position",
-        "remote": remote
-    }
-    try:
-        # Generate a unique positionID
-        response = requests.get(f'http://api:4000/po/positions')
-        response.raise_for_status()
-        existing_positions = response.json()
-        existing_ids = {position['positionID'] for position in existing_positions}
-        new_position_id = max(existing_ids) + 1 if existing_ids else 1
-
-        position_data["positionID"] = new_position_id
-
-        response = requests.post(f'http://api:4000/po/positions', json=position_data)
-        response.raise_for_status()
-        return response.json()['positionID']
-    except requests.exceptions.RequestException as e:
-        st.error(f"Failed to create position: {e}")
-        return None
-
 def get_author_id_by_name(author_name):
     try:
         response = requests.get(f'http://api:4000/rver/reviewers?name={author_name}')
@@ -94,7 +70,6 @@ def add_review(review_data):
         response = requests.post('http://api:4000/r/reviews', json=review_data)
         response.raise_for_status()
         st.success("Review added successfully!")
-        st.experimental_rerun()
     except requests.exceptions.RequestException as e:
         st.error(f"Failed to add review: {e}")
 
@@ -110,32 +85,25 @@ def main():
     
     if company_id:
         positions = get_all_positions()
-        position_names = ["Add a new position"] + [position['name'] for position in positions]
+        position_names = [position['name'] for position in positions]
         selected_position = st.selectbox("Select Position", position_names)
         
-        if selected_position == "Add a new position":
-            position_name = st.text_input("Enter Position Name:")
-            remote = st.checkbox("Was the position remote?")
-        else:
-            position_name = selected_position
-            remote = False
+        position_name = selected_position
+        remote = False
         
         author_name = "Ally Descoteaux"
         title = st.text_input("Review Title:")
         num_co_op = st.number_input("Number of Co-ops:", min_value=0)
-        rating = st.slider("Rating:", min_value=1, max_value=5)
+        rating = st.slider("Rating:", min_value=0, max_value=5)
         recommend = st.checkbox("Recommend")
         pay_type = st.selectbox("Pay Type:", ["hourly", "salary"])
         pay = st.number_input("Pay:", min_value=0.0, format="%.2f")
-        job_type = st.text_input("Job Type:")
+        job_type = st.selectbox("Job Type:", ["Internship", "Co-op", "Full-time", "Part Time", "Other"])
         text = st.text_area("Review Text:")
-        verified = st.checkbox("Verified")
+        verified = 0
         
         if st.button("Submit Review"):
-            if selected_position == "Add a new position":
-                position_id = create_position(company_id, position_name, remote)
-            else:
-                position_id = get_position_id_by_name(position_name)
+            position_id = get_position_id_by_name(position_name)
             
             if position_id:
                 author_id = get_author_id_by_name(author_name)
