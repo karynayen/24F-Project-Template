@@ -26,12 +26,8 @@ def CompanyRatingsNav():
         "pages/01_Company_Ratings.py", label="Company Ratings", icon="🏦"
     )
 
-
-def MapDemoNav():
-    st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
-
 def GeneralRatingsNav():
-    st.sidebar.page_link("pages/05_General_Ratings_By_Major.py", label="General Ratings By Major", icon="🗺️")
+    st.sidebar.page_link("pages/05_General_Ratings_By_College.py", label="General Ratings", icon="🗺️")
 
 
 ## ------------------------ Examples for Role of usaid_worker ------------------------
@@ -80,11 +76,10 @@ def SideBarLinks(show_home=False):
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
 
-        # Show "Company Ratings" Link and "General Ratings By Major" Link if the user is a ANALYST role.
+        # Show "Company Ratings" Link and "General Ratings By College" Link if the user is a ANALYST role.
         if st.session_state["role"] == "analyst":
             AnalaystHomeNav()
             CompanyRatingsNav()
-            MapDemoNav()
             GeneralRatingsNav()
             
 
