@@ -15,7 +15,7 @@ from backend.db_connection import db
 industries = Blueprint('industries', __name__)
 
 #------------------------------------------------------------
-# Get all industries and their information from the system
+# Get all industries and their information
 @industries.route('/industries', methods=['GET'])
 def get_industries(): 
     query = 'SELECT * FROM industry'
@@ -26,49 +26,6 @@ def get_industries():
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200
     return the_response
-
-#------------------------------------------------------------
-# Get all companies and their information from the database for a given industry
-@industries.route('/industries/<industryID>/companies', methods=['GET'])
-def get_industry(industryID):
-    query = f'''
-        SELECT  i.name AS industry_name,
-                c.name AS company_name,
-                c.size AS company_size,
-                AVG(r.rating) AS overall_rating,
-                COUNT(r.rating) AS num_ratings,
-                COUNT(r.reviewID) AS num_reviews,
-                col.name AS college_name
-        FROM company c
-            JOIN companyIndustry ci ON c.companyID = ci.companyID
-            JOIN industry i ON i.industryID = ci.industryID
-            JOIN reviews r ON c.companyID = r.companyID
-            JOIN position p ON p.positionID = r.positionID
-            JOIN positionTargetCollege ptc ON ptc.positionID = p.positionID
-            JOIN college col ON col.collegeID = ptc.collegeID
-        WHERE i.industryID = {int(industryID)}
-        GROUP BY i.name, c.name, c.name, i.name, c.size, col.name
-    '''
-    
-    # get a cursor object from the database~ cursor is like 2d grid that you can iterate over with your code
-    cursor = db.get_db().cursor()
-
-    # use cursor to query the database for a list of products
-    cursor.execute(query)
-
-    # fetch all the data from the cursor
-    # The cursor will return the data as a 
-    # Python Dictionary
-    theData = cursor.fetchall()
-
-    # Create a HTTP Response object and add results of the query to it
-    # after "jasonify"-ing it.
-    response = make_response(jsonify(theData))
-    # set the proper HTTP Status code of 200 (meaning all good)
-    response.status_code = 200
-    # send the response back to the client
-    return response
-
 
 # ------------------------------------------------------------
 # This is a POST route to add a new industry.
@@ -123,23 +80,5 @@ def delete_position(industryID):
     cursor.execute(query, (industryID))
     db.get_db().commit()
     response = make_response(jsonify({"message": "Industry deleted successfully"}))
-    response.status_code = 200
-    return response
-
-#-------------------------------------------------------------
-# Get all industry IDs
-@industries.route('/industryIDs', methods = ['GET'])
-def get_all_industryIDs():
-    query = '''
-        SELECT DISTINCT industryID AS label, industryID as value
-        FROM industry
-        ORDER BY industryID
-    '''
-
-    cursor = db.get_db().cursor()
-    cursor.execute(query)
-    theData = cursor.fetchall()
-
-    response = make_response(jsonify(theData))
     response.status_code = 200
     return response
