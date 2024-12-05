@@ -45,6 +45,42 @@ def get_reviews():
     response.status_code = 200
 
     return response
+
+#-------------------------------------------------
+# Get all reviews associated with a company
+@reviews.route('/reviews/<int:companyID>', methods=['GET'])
+def get_reviews_company(companyID):
+    query = '''
+        SELECT reviewID,
+               positionID,
+               companyID,
+               authorID,
+               title,
+               rating,
+               recommend,
+               pay_type,
+               pay,
+               job_type,
+               date_time,
+               verified,
+               text,
+               r.name
+        FROM reviews
+            NATURAL JOIN reviewer r
+        WHERE companyID = %s
+    '''
+
+    cursor = db.get_db().cursor()
+
+    cursor.execute(query, companyID)
+
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+
+    response.status_code = 200
+
+    return response
 #---------------------------------------------------
 # Add a new review to the system
 @reviews.route('/reviews', methods=['POST'])
