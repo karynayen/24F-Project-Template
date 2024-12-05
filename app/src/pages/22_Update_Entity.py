@@ -8,12 +8,12 @@ st.set_page_config(layout = 'wide')
 
 SideBarLinks()
 
-st.title('Update Company Profile Page')
+st.title('Update Entities')
 
 st.write('\n\n')
 
 try:
-    response = requests.get('http://api:4000/co/companies')
+    response = requests.get('http://api:4000/co/companies').json()
 
     st.dataframe(response)
 
@@ -34,7 +34,7 @@ except requests.exceptions.RequestException as e:
 with st.form('update_company_form'):
 
     name = st.text_input("Company Name")
-    size = st.text_input("Company Size", min_value=0.0, step=1.0)
+    size = st.number_input("Company Size", min_value=0.0, step=1.0)
     companyID = st.selectbox("Company ID", options=companies_id_options, index=0)
 
     submit_button = st.form_submit_button("Update Company")
@@ -57,7 +57,7 @@ with st.form('update_company_form'):
 
             try:
 
-                response = requests.put(f'http://api:4000/com/companies/{companyID}', json=company_data)
+                response = requests.put(f'http://api:4000/co/companies/{companyID}', json=company_data)
                 if response.status_code == 200:
                     st.success("Company updated successfully!")
                 else:
@@ -66,7 +66,7 @@ with st.form('update_company_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/col/colleges')
+    response = requests.get('http://api:4000/col/colleges').json()
 
     st.dataframe(response)
 
@@ -115,7 +115,7 @@ with st.form('update_college_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/i/industries')
+    response = requests.get('http://api:4000/i/industries').json()
 
     st.dataframe(response)
 
@@ -155,7 +155,7 @@ with st.form('update_industry_form'):
 
             try:
 
-                response = requests.put(f'http://api:4000/i/industries/{industryID}', json=industry_data)
+                response = requests.put(f'http://api:4000/i/industries', json=industry_data)
                 if response.status_code == 200:
                     st.success("Industry updated successfully!")
                 else:
@@ -164,7 +164,7 @@ with st.form('update_industry_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/po/positions')
+    response = requests.get('http://api:4000/po/positions').json()
 
     st.dataframe(response)
 
@@ -185,7 +185,7 @@ except requests.exceptions.RequestException as e:
 with st.form('update_position_form'):
 
     name = st.text_input("Position Name")
-    description = st.text_input("Position Description")
+    description = st.text_area("Position Description")
     remote = st.selectbox("Is Position Remote?", options=[False, True], index=0)
     positionID = st.selectbox("Position ID", options=positions_id_options, index=0)
 

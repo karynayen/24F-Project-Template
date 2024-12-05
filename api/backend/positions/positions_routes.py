@@ -36,7 +36,7 @@ def add_position():
     companyID = data['companyID']
     name = data['name']
     description = data.get('description', '')
-    remote = "TRUE" if data['remote'] else "FALSE"
+    remote = 1 if data['remote'] else 0
     
     query = '''
         INSERT INTO position (companyID, name, description, remote)
@@ -55,7 +55,7 @@ def update_position(positionID):
     data = request.json
     name = data['name']
     description = data.get('description', '')
-    remote = "TRUE" if data['remote'] else "FALSE"
+    remote = 1 if data['remote'] else 0
     
     query = '''
         UPDATE position

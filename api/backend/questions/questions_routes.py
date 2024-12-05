@@ -14,6 +14,18 @@ from backend.ml_models.model01 import predict
 # routes.
 questions = Blueprint('questions', __name__)
 
+#------------------------------------------------------------
+# Get all questions
+@questions.route('/questions', methods=['GET'])
+def get_answers():
+    query = 'SELECT * FROM questions'
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
 
 #------------------------------------------------------------
 # Edit a posted questions

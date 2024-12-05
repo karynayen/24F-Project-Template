@@ -8,12 +8,12 @@ st.set_page_config(layout = 'wide')
 
 SideBarLinks()
 
-st.title('Remove Questions and Answers')
+st.title('Remove Entities')
 
 st.write('\n\n')
 
 try:
-    response = requests.get('http://api:4000/q/questions')
+    response = requests.get('http://api:4000/q/questions').json()
 
     st.dataframe(response)
 
@@ -58,7 +58,7 @@ with st.form('delete_question_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/a/answers')
+    response = requests.get('http://api:4000/a/answers').json()
 
     st.dataframe(response)
 
@@ -103,7 +103,7 @@ with st.form('delete_answer_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/co/companies')
+    response = requests.get('http://api:4000/co/companies').json()
 
     st.dataframe(response)
 
@@ -148,11 +148,11 @@ with st.form('delete_company_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/col/colleges')
+    response = requests.get('http://api:4000/col/colleges').json()
 
     st.dataframe(response)
 
-    colleges_response = requests.get('http://api:4000/col/collegeID')
+    colleges_response = requests.get('http://api:4000/col/collegeIDs')
 
     if colleges_response.status_code == 200:
         colleges_data = colleges_response.json()
@@ -193,7 +193,7 @@ with st.form('delete_college_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/i/industries')
+    response = requests.get('http://api:4000/i/industries').json()
 
     st.dataframe(response)
 
@@ -238,7 +238,7 @@ with st.form('delete_industry_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/po/positions')
+    response = requests.get('http://api:4000/po/positions').json()
 
     st.dataframe(response)
 

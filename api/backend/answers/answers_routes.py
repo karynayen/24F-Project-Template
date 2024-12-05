@@ -15,6 +15,19 @@ from backend.ml_models.model01 import predict
 answers = Blueprint('answers', __name__)
 
 #------------------------------------------------------------
+# Get all answers
+@answers.route('/answers', methods=['GET'])
+def get_answers():
+    query = 'SELECT * FROM answers'
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
+
+#------------------------------------------------------------
 # Edit a posted answers
 @answers.route('/answers/<answerId>', methods=['PUT'])
 def edit_answer(answerId):

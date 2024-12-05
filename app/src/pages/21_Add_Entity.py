@@ -8,14 +8,14 @@ st.set_page_config(layout = 'wide')
 
 SideBarLinks()
 
-st.title('Add Company Profile, College, Or Industry Page')
+st.title('Add Entities')
 
 st.write('\n\n')
 
 with st.form('add_company_form'):
 
     name = st.text_input("Company Name")
-    size = st.text_input("Company Size", min_value=0.0, step=1.0)
+    size = st.number_input("Company Size", min_value=0.0, step=1.0)
 
     submit_button = st.form_submit_button("Add Company")
 
@@ -95,9 +95,9 @@ with st.form('add_industry_form'):
                 st.error(f"Error connecting to server: {str(e)}")
 
 try:
-    response = requests.get('http://api:4000/co/companies')
+    companyData = requests.get('http://api:4000/co/companies').json()
 
-    st.dataframe(response)
+    st.dataframe(companyData)
 
     companies_response = requests.get('http://api:4000/co/companyIDs')
 
@@ -117,7 +117,7 @@ with st.form('add_position_form'):
 
     companyID = st.selectbox("Company ID", options=companies_id_options, index=0)
     name = st.text_input("Position Name")
-    description = st.text_input("Position Description")
+    description = st.text_area("Position Description")
     remote = st.selectbox("Is Position Remote?", options=[False, True], index=0)
 
     submit_button = st.form_submit_button("Add Position")
