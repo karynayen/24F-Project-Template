@@ -203,7 +203,6 @@ def get_company_positions_reviews_answers(companyID, positionID):
     response.status_code = 200
     return response
 
-
 #------------------------------------------------------------
 # Delete a company from the system
 # Note due to foreign key constraints, you can only delete a company if it has no other references

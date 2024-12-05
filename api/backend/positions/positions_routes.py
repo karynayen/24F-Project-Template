@@ -36,7 +36,7 @@ def add_position():
     companyID = data['companyID']
     name = data['name']
     description = data.get('description', '')
-    remote = data['remote']
+    remote = "TRUE" if data['remote'] else "FALSE"
     
     query = '''
         INSERT INTO position (companyID, name, description, remote)
@@ -55,7 +55,7 @@ def update_position(positionID):
     data = request.json
     name = data['name']
     description = data.get('description', '')
-    remote = data['remote']
+    remote = "TRUE" if data['remote'] else "FALSE"
     
     query = '''
         UPDATE position
@@ -79,3 +79,22 @@ def delete_position(positionID):
     response = make_response(jsonify({"message": "Position deleted successfully"}))
     response.status_code = 200
     return response
+
+#-------------------------------------------------------------
+# Get all position IDs
+@positions.route('/positionIDs', methods = ['GET'])
+def get_all_positionIDs():
+    query = '''
+        SELECT DISTINCT positionID AS label, positionID as value
+        FROM position
+        ORDER BY positionID
+    '''
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
+

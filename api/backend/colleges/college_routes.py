@@ -132,3 +132,21 @@ def delete_college(collegeID):
     response = make_response(jsonify({"message": "College deleted successfully"}))
     response.status_code = 200
     return response
+
+#-------------------------------------------------------------
+# Get all college IDs
+@colleges.route('/collegeIDs', methods = ['GET'])
+def get_all_collegeIDs():
+    query = '''
+        SELECT DISTINCT collegeID AS label, collegeID as value
+        FROM college
+        ORDER BY collegeID
+    '''
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
