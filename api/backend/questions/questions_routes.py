@@ -14,6 +14,18 @@ from backend.ml_models.model01 import predict
 # routes.
 questions = Blueprint('questions', __name__)
 
+#------------------------------------------------------------
+# Get all questions
+@questions.route('/questions', methods=['GET'])
+def get_answers():
+    query = 'SELECT * FROM questions'
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
 
 #------------------------------------------------------------
 # Edit a posted questions
@@ -83,6 +95,25 @@ def delete_quesitons(questionId):
         db.get_db().rollback()
         return jsonify({'error': str(e)}), 500
     
+
+#-------------------------------------------------------------
+# Get all question Ids
+@questions.route('/questionIds', methods = ['GET'])
+def get_all_questionIds():
+    query = '''
+        SELECT DISTINCT questionId AS label, questionId as value
+        FROM questions
+        ORDER BY questionId
+    '''
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
+
 #------------------------------------------------------------
 # Get questions associated with a post
 @questions.route('/questions/<int:postId>', methods=['GET'])
@@ -110,4 +141,3 @@ def get_questions(postId):
     except Exception as e:
         current_app.logger.error(f'Error getting questions for postId {postId}: {str(e)}')
         return jsonify({'error': 'An internal server error occurred'}), 500
-    

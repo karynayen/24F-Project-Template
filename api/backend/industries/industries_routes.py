@@ -125,3 +125,21 @@ def delete_position(industryID):
     response = make_response(jsonify({"message": "Industry deleted successfully"}))
     response.status_code = 200
     return response
+
+#-------------------------------------------------------------
+# Get all industry IDs
+@industries.route('/industryIDs', methods = ['GET'])
+def get_all_industryIDs():
+    query = '''
+        SELECT DISTINCT industryID AS label, industryID as value
+        FROM industry
+        ORDER BY industryID
+    '''
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response

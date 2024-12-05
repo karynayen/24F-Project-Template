@@ -50,7 +50,13 @@ def SeeCompanyReviewsNav():
 def AdminPageNav():
     st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
     st.sidebar.page_link(
-        "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
+        "pages/21_Add_Entity.py", label="Add Entity"
+    )
+    st.sidebar.page_link(
+        "pages/22_Update_Entity.py", label="Update Entity"
+    )
+    st.sidebar.page_link(
+        "pages/23_Remove_Entity.py", label="Remove Entity"
     )
 
 def CoFilters():
