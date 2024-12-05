@@ -55,6 +55,14 @@ def AdminPageNav():
         "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
     )
 
+def CoFilters():
+    st.sidebar.page_link("pages/Job_Seeker.py", label="Job Seeker")
+    st.sidebar.page_link(
+    "pages/07_See_Questions.py", label="See Questions and Answers", icon="💻"
+    )
+    st.sidebar.page_link(
+        "pages/06_Find_Jobs.py", label="Reviews Feed"
+    )
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -93,6 +101,10 @@ def SideBarLinks(show_home=False):
         if st.session_state["role"] == "administrator":
             AdminPageNav()
 
+
+        # If the user is a job seeker, give them access to job seeker links
+        if st.session_state['role'] == 'job_seeker':
+            CoFilters()
     # Always show the About page at the bottom of the list of links
     AboutPageNav()
 
