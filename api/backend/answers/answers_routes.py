@@ -115,7 +115,7 @@ def get_all_answerIds():
   
 # Get answers associated with a question
 @answers.route('/answers/<int:questionId>', methods=['GET'])
-def get_answers(questionId):
+def get_answer(questionId):
     try:
         current_app.logger.info(f'GET /answers/{questionId} route')
         
