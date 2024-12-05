@@ -190,7 +190,7 @@ for _, row in unique_company.iterrows():
 # Bar plots for rating distribution
 
         # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
-        with st.expander("Histogram of Rating Distribution- Click to expand", expanded=False):
+        with st.expander("Bar Plot of Rating Distribution- Click to expand", expanded=False):
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
                 fig, ax = plt.subplots(figsize=(4, 2))
