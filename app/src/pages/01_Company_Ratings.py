@@ -23,7 +23,7 @@ st.write("Here are all of the reviews for each company and a bar plot to show th
 # Side bar for filtering companies
 st.sidebar.header('User Input Parameters')
 
-# Sidebar UI for choosing company size
+# Sidebar UI for filtering for company size
 st.sidebar.header("Company Size")
 company_size = st.sidebar.radio(
     "Select the size of the company:",
@@ -97,7 +97,6 @@ except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   reviews_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-# st.dataframe(reviews_df)
 
 #adding overall average rating to unique companies for sorting
 or_df = reviews_df[['companyID', 'rating']]
@@ -114,7 +113,7 @@ for _, row in unique_company.iterrows():
 unique_company['Overall Rating'] = mean_rating_ls
 unique_company['num_ratings'] = num_rating_ls
 
- # Use the sort_by value to sort your dataframe
+ # Use the sort_by value to sort the dataframe in the order desired
 if sort_by == 'Company Size Desc':
     unique_company = unique_company.sort_values('size', ascending=False)
 elif sort_by == 'Company Size Asc':
@@ -128,14 +127,10 @@ elif sort_by == 'Number of Ratings Desc':
 elif sort_by == 'Number of Ratings Asc':
     unique_company = unique_company.sort_values('num_ratings', ascending=True)
 
-    
-# st.dataframe(unique_company)
 # ======================================================================================================================
 
 st.write("# Company Ratings")
-# st.write()
 
-# Getting company information: name, city/state, industry, size
 rank = 1
 for _, row in unique_company.iterrows():
     # Extract company details
@@ -161,19 +156,19 @@ for _, row in unique_company.iterrows():
                 f"### **{rank}. {name}**  \n"
                 f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  "
                 )
-        with col2:  # Right column for size
+        with col2:  # Right column for overall rating
             st.markdown(
                 f"<br><br>**Overall Rating:** {mean_rating}/5", 
                 unsafe_allow_html=True
                 )
 
         col3, col4 = st.columns([1, 1])  # Create another row for industry and rating info
-        with col3:  # Left column for industry
+        with col3:  # Left column for industry and size
             st.markdown(
                 f"**Industries:** {', '.join(industry)}  \n"
                 f"**Size:** {size}"
                 )
-        with col4:  # Right column for overall rating
+        with col4:  # Right column for number of ratings
             st.markdown(
                 f"**Number of Ratings:** {num_ratings}"
                 )
@@ -185,11 +180,14 @@ for _, row in unique_company.iterrows():
         co_review_df = pd.DataFrame()
             # Iterate through reviews_df
         for n in range(len(reviews_df['companyID'])):
+
             #match companyID from reviews_df to companyID from the unique company df
             co_review_df = reviews_df[reviews_df['companyID'] == coID].copy()
-
+            
+            # column names we want
             expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 
                             'recommend', 'text', 'verified']
+            # filtering df for column names of interest
             matching_columns = co_review_df[expected_labels]
             
             # Display the reviews with only the rows of interest
@@ -203,8 +201,7 @@ for _, row in unique_company.iterrows():
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
                 fig, ax = plt.subplots(figsize=(4, 2))
-                # x axis = rating values
-                # y axis = rating value frequency
+                # x axis = rating values | y axis = rating value frequency
                 ax.bar(matching_columns['rating'].value_counts().index, 
                     matching_columns['rating'].value_counts().values,
                     width = 0.5)

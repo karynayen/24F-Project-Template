@@ -15,7 +15,7 @@ from backend.db_connection import db
 industries = Blueprint('industries', __name__)
 
 #------------------------------------------------------------
-# Get all companies from the system
+# Get all industries and their information from the system
 @industries.route('/industries', methods=['GET'])
 def get_industries(): 
     query = 'SELECT * FROM industry'
@@ -28,8 +28,7 @@ def get_industries():
     return the_response
 
 #------------------------------------------------------------
-# Get all the products from the database, package them up,
-# and return them to the client
+# Get all companies and their information from the database for a given industry
 @industries.route('/industries/<industryID>/companies', methods=['GET'])
 def get_industry(industryID):
     query = f'''
@@ -89,13 +88,7 @@ def add_new_industry():
         INSERT INTO `industry` (name)
         VALUES (%s)
     '''
-    # TODO: Make sure the version of the query above works properly
-    # Constructing the query
-    # query = 'insert into products (product_name, description, category, list_price) values ("'
-    # query += name + '", "'
-    # query += description + '", "'
-    # query += category + '", '
-    # query += str(price) + ')'
+
     current_app.logger.info(query, name)
 
     # executing and committing the insert statement 
