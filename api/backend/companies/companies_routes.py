@@ -130,24 +130,6 @@ def get_company_reviews(companyID):
     response = make_response(jsonify(theData))
     response.status_code = 200
     return response
-    current_app.logger.info('GET /companies/<companyID>/positions/<positionID>/reviews/answers route')
-    query = f'''
-        SELECT a.text, a.author, a.postId, a.answerId, p.positionID
-        FROM company c 
-            JOIN position p ON c.companyID = p.companyID
-            JOIN reviews r ON c.companyID = r.companyID
-            JOIN answers a ON r.reviewID = a.postId
-        WHERE c.companyID = {companyID} AND p.positionID = {positionID}
-    '''
-    cursor = db.get_db().cursor()
-    cursor.execute(query)
-    theData = cursor.fetchall()
-    
-    current_app.logger.info(f'GET /companies/{companyID}/positions/{positionID}/reviews/answers Result of the query={theData}')
-
-    response = make_response(jsonify(theData))
-    response.status_code = 200
-    return response
 
 #------------------------------------------------------------
 # Delete a company from the system
