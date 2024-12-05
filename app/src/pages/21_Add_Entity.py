@@ -87,7 +87,7 @@ with st.form('add_industry_form'):
             try:
 
                 response = requests.post('http://api:4000/i/industries', json=industry_data)
-                if response.status_code == 200:
+                if response.status_code == 200 or response.status_code == 201:
                     st.success("Industry added successfully!")
                 else:
                     st.error(f"Error adding industry: {response.text}")
@@ -142,7 +142,7 @@ with st.form('add_position_form'):
             try:
 
                 response = requests.post('http://api:4000/po/positions', json=position_data)
-                if response.status_code == 200:
+                if response.status_code == 200 or response.status_code == 201:
                     st.success("Position added successfully!")
                 else:
                     st.error(f"Error adding position: {response.text}")
