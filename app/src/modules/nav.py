@@ -30,21 +30,20 @@ def GeneralRatingsNav():
     st.sidebar.page_link("pages/05_General_Ratings_By_College.py", label="General Ratings", icon="🗺️")
 
 
-## ------------------------ Examples for Role of usaid_worker ------------------------
-def ApiTestNav():
-    st.sidebar.page_link("pages/12_API_Test.py", label="Test the API", icon="🛜")
 
+#### ------------------------ Examples for Role of reviewer ------------------------
+def ReviewerHomeNav():
+    st.sidebar.page_link("pages/10_Reviewer_Home.py", label="Reviewer Home", icon="🏠")
 
-def PredictionNav():
-    st.sidebar.page_link(
-        "pages/11_Prediction.py", label="Regression Prediction", icon="📈"
-    )
+def SeeUserReviewsNav():
+    st.sidebar.page_link("pages/12_See_User_Reviews.py", label="See Your Reviews", icon="📄")
 
+def AddReviewNav():
+    st.sidebar.page_link("pages/11_Add_Review.py", label="Add a Review", icon="➕")
 
-def ClassificationNav():
-    st.sidebar.page_link(
-        "pages/13_Classification.py", label="Classification Demo", icon="🌺"
-    )
+def SeeCompanyReviewsNav():
+    st.sidebar.page_link("pages/13_See_Company_Reviews.py", label="See Company Reviews", icon="🏢")
+
 
 
 #### ------------------------ System Admin Role ------------------------
@@ -57,10 +56,10 @@ def AdminPageNav():
 def CoFilters():
     st.sidebar.page_link("pages/Job_Seeker.py", label="Job Seeker")
     st.sidebar.page_link(
-    "pages/07_See_Questions.py", label="See Questions and Answers", icon="💻"
+    "pages/37_See_Questions.py", label="See Questions and Answers", icon="💻"
     )
     st.sidebar.page_link(
-        "pages/06_Find_Jobs.py", label="Reviews Feed"
+        "pages/36_Find_Jobs.py", label="Reviews Feed"
     )
 
 # --------------------------------Links Function -----------------------------------------------
@@ -91,11 +90,12 @@ def SideBarLinks(show_home=False):
             GeneralRatingsNav()
             
 
-        # If the user role is usaid worker, show the Api Testing page
-        if st.session_state["role"] == "usaid_worker":
-            PredictionNav()
-            ApiTestNav()
-            ClassificationNav()
+        # If the user role is reviewer, show the Reviewer pages
+        if st.session_state["role"] == "reviewer":
+            ReviewerHomeNav()
+            SeeUserReviewsNav()
+            AddReviewNav()
+            SeeCompanyReviewsNav()
 
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state["role"] == "administrator":
