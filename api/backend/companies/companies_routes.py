@@ -19,7 +19,15 @@ companies = Blueprint('companies', __name__)
 # Get all companies from the system
 @companies.route('/companies', methods=['GET'])
 def get_companies(): 
-    query = 'SELECT * FROM company'
+    query = '''
+        SELECT *
+        FROM company c
+        JOIN companylocation cl ON c.companyID = cl.companyID
+        JOIN location l ON cl.locID = l.locID
+        JOIN companyIndustry ci ON c.companyID = ci.companyID
+        JOIN industry i ON ci.industryID = i.industryID
+        '''
+    
     cursor = db.get_db().cursor()
     cursor.execute(query)
     theData = cursor.fetchall()
