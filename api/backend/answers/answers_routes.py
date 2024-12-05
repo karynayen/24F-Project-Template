@@ -81,3 +81,21 @@ def delete_quesitons(answerId):
         current_app.logger.error(f'Error deleting answer {answerId}: {str(e)}')
         db.get_db().rollback()
         return jsonify({'error': str(e)}), 500
+    
+#-------------------------------------------------------------
+# Get all answer IDs
+@answers.route('/answerIds', methods = ['GET'])
+def get_all_answerIds():
+    query = '''
+        SELECT DISTINCT answerId AS label, answerId as value
+        FROM answers
+        ORDER BY answerId
+    '''
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response

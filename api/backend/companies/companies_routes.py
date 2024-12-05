@@ -194,3 +194,35 @@ def get_company_positions_reviews_answers(companyID, positionID):
     response = make_response(jsonify(theData))
     response.status_code = 200
     return response
+
+#------------------------------------------------------------
+# Delete a company from the system
+# Note due to foreign key constraints, you can only delete a company if it has no other references
+@companies.route('/companies/<companyID>', methods=['DELETE'])
+def delete_company(companyID):
+    current_app.logger.info('DELETE /companies/<companyID> route')
+    query = f'''
+        DELETE FROM company WHERE companyID = {companyID}
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    db.get_db().commit()
+    return 'company deleted!'
+
+#-------------------------------------------------------------
+# Get all company IDs
+@companies.route('/companyIDs', methods = ['GET'])
+def get_all_companyIDs():
+    query = '''
+        SELECT DISTINCT companyID AS label, companyID as value
+        FROM company
+        ORDER BY companyID
+    '''
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    response = make_response(jsonify(theData))
+    response.status_code = 200
+    return response
