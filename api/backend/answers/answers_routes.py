@@ -81,3 +81,31 @@ def delete_quesitons(answerId):
         current_app.logger.error(f'Error deleting answer {answerId}: {str(e)}')
         db.get_db().rollback()
         return jsonify({'error': str(e)}), 500
+    
+# Get answers associated with a question
+@answers.route('/answers/<int:questionId>', methods=['GET'])
+def get_answers(questionId):
+    try:
+        current_app.logger.info(f'GET /answers/{questionId} route')
+        
+        get_answers_query = '''
+            SELECT a.text 
+            FROM answers a
+                JOIN questions q ON a.questionId = q.questionId
+            WHERE a.questionId = %s
+        '''
+        
+        with db.get_db().cursor() as cursor:
+            cursor.execute(get_answers_query, (questionId,))
+            answers = cursor.fetchall()
+        
+        current_app.logger.info(f'Query executed. Found {len(answers)} answers.')
+        
+        if not answers:
+            return jsonify({'message': 'No answers found for this question'}), 404
+        
+        return jsonify({'answers': answers}), 200
+        
+    except Exception as e:
+        current_app.logger.error(f'Error getting answers for questionId {questionId}: {str(e)}')
+        return jsonify({'error': 'An internal server error occurred'}), 500
