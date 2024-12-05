@@ -33,7 +33,8 @@ companies_df = pd.DataFrame(companies)
 for row in companies_df.iterrows():
     companyID = row[1][0]
     reviews = pd.DataFrame(requests.get(f"http://api:4000/co/companies/{companyID}/reviews").json()).loc[:, ['title', 'text', 'reviewID', 'rating']]
-
+    
+    st.write(reviews)
 
     # Create expanders for each company
     company_name = row[1][1]
