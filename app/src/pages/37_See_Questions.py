@@ -64,7 +64,7 @@ def get_reviews(company_info, j):
     return(reviews)
     
 
-companies = requests.get('http://api:4000/co/companies').json()
+companies = requests.get('http://api:4000/co/companies_simple').json()
 companies_df = pd.DataFrame(companies)
 for i in range(len(companies_df)): 
     companyID = companies_df.iloc[i]['companyID']        
