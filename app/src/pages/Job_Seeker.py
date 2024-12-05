@@ -15,9 +15,9 @@ st.write('### What would you like to do today?')
 if st.button('Find Jobs!', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/06_Find_Jobs.py')
+  st.switch_page('pages/36_Find_Jobs.py')
   
 if st.button('Look at Questions',
              type='primary',
              use_container_width=True):
-    st.switch_page('pages/07_See_Questions.py')
+    st.switch_page('pages/37_See_Questions.py')
