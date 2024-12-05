@@ -43,16 +43,19 @@ def add_new_reviewer():
 
     #extracting the variable
     major = the_data['major']
-    name = the_data['reviewer_name']
+    name = the_data['name']
     num_coops = the_data['num_coops']
     year = the_data['year']
     bio = the_data['bio']
     active = the_data['active']
     
-    query = f'''
-        INSERT INTO reviewer (major, name, num_co-ops, year, num_posts, bio, active)
-        VALUES ('{major}', '{name}', '{num_coops}', '{year}', '{bio}', '{active}',)
+    query = '''
+    INSERT INTO reviewer (major, `name`, `num_co-ops`, `year`, bio, active) 
+    VALUES (%s, %s, %s, %s, %s, %s)
     '''
+    data = (major, name, num_coops, year, bio, active)
+    
+
     # TODO: Make sure the version of the query above works properly
     # Constructing the query
     # query = 'insert into products (product_name, description, category, list_price) values ("'
@@ -64,11 +67,12 @@ def add_new_reviewer():
 
     # executing and committing the insert statement 
     cursor = db.get_db().cursor()
-    cursor.execute(query)
+    cursor.execute(query, data)
     db.get_db().commit()
     
-    response = make_response("Successfully added product")
+    response = make_response("Successfully added reviewer")
     response.status_code = 200
+    # return response
     return response
 
 @reviewers.route('/reviewers', methods=['PUT'])
@@ -78,25 +82,25 @@ def update_reviewer():
     reviewerID = reviewer_info['reviewerID']
     major = reviewer_info['major']
     name = reviewer_info['name']
-    num_coops = reviewer_info['num_co-ops']
+    num_coops = reviewer_info['num_coops']
     year = reviewer_info['year']
     bio = reviewer_info['bio']
     active = reviewer_info['active']
 
-    query = 'UPDATE company SET major = %s, name = %s, num_co-ops  = %s, year  = %s, bio  = %s, active  = %s where reviewerID = %s'
+    query = 'UPDATE reviewer SET major = %s, `name` = %s, `num_co-ops`  = %s, `year`  = %s, bio  = %s, active  = %s where reviewerID = %s'
     data = (major, name, num_coops, year, bio, active, reviewerID)
     cursor = db.get_db().cursor()
-    r = cursor.execute(query, data)
+    cursor.execute(query, data)
     db.get_db().commit()
     return 'reviewer updated!'
 
 # Delete a reviewer
 @reviewers.route('/reviewers/<int:reviewerID>', methods=['DELETE'])
 def delete_reviewer(reviewerID):
-    query = 'DELETE FROM industry WHERE reviewerID = %s'
+    query = 'DELETE FROM reviewer WHERE reviewerID = %s'
     cursor = db.get_db().cursor()
-    cursor.execute(query, (reviewerID,))
+    cursor.execute(query, (reviewerID))
     db.get_db().commit()
-    response = make_response(jsonify({"message": "Industry deleted successfully"}))
+    response = make_response(jsonify({"message": "Reviewer deleted successfully"}))
     response.status_code = 200
     return response

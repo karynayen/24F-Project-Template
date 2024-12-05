@@ -65,8 +65,12 @@ try:
   #companyname (name), postcode, size, state, street 
   co_data = requests.get('http://api:4000/co/companies').json()
   company_df= pd.DataFrame(co_data)
-  filtered_co_df = company_df[(company_df["size"] >= selected_range[0]) & (company_df["size"] < selected_range[1])]
-
+  filtered_co_df = company_df[(company_df["size"] >= selected_range[0]) & 
+                              (company_df["size"] < selected_range[1])]
+  if filtered_co_df.empty:
+     st.warning("No companies found within the selected size range. Please adjust your filters.")
+     st.stop()
+  
 except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   filtered_co_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
@@ -150,53 +154,69 @@ for _, row in unique_company.iterrows():
     
    
     # Formatting data to be more readable
-    st.markdown(
-    f"### **{rank}. {name}**  \n"
-    f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  \n"
-    f"**Industry:** {', '.join(industry)}  \n"
-    f"**Size:** {size}  \n"
-    f"**Overall Rating:** {mean_rating}  \n"
-    f"**Number of Ratings:** {num_ratings}"
-    )
-    rank += 1
-# Matching reviews to Company
+    with st.container(border = True):
+        col1, col2 = st.columns([1, 1])  # Define two columns with relative widths
+        with col1:  # Left column for rank, name, and locations
+            st.markdown(
+                f"### **{rank}. {name}**  \n"
+                f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  "
+                )
+        with col2:  # Right column for size
+            st.markdown(
+                f"<br><br>**Overall Rating:** {mean_rating}/5", 
+                unsafe_allow_html=True
+                )
 
-    # Initialize empty df
-    co_review_df = pd.DataFrame()
-    # Iterate through reviews_df
-    for n in range(len(reviews_df['companyID'])):
-        #match companyID from reviews_df to companyID from the unique company df
-        co_review_df = reviews_df[reviews_df['companyID'] == coID].copy()
+        col3, col4 = st.columns([1, 1])  # Create another row for industry and rating info
+        with col3:  # Left column for industry
+            st.markdown(
+                f"**Industries:** {', '.join(industry)}  \n"
+                f"**Size:** {size}"
+                )
+        with col4:  # Right column for overall rating
+            st.markdown(
+                f"**Number of Ratings:** {num_ratings}"
+                )
+        rank += 1
 
-    expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 
-                       'recommend', 'text', 'verified']
-    matching_columns = co_review_df[expected_labels]
-    
-    # Display the reviews with only the rows of interest
-    st.write("#### **Reviews**")
-    st.table(matching_columns)
+        # Matching reviews to Company
 
-# Bar plots for rating distribution
+        # Initialize empty df
+        co_review_df = pd.DataFrame()
+            # Iterate through reviews_df
+        for n in range(len(reviews_df['companyID'])):
+            #match companyID from reviews_df to companyID from the unique company df
+            co_review_df = reviews_df[reviews_df['companyID'] == coID].copy()
 
-    # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        fig, ax = plt.subplots(figsize=(4, 2))
-        # x axis = rating values
-        # y axis = rating value frequency
-        ax.bar(matching_columns['rating'].value_counts().index, 
-               matching_columns['rating'].value_counts().values,
-               width = 0.5)
-        
-        # plot design
-        ax.set_title('Company Ratings')
-        ax.set_xlabel('Rating')
-        ax.set_ylabel('Count')
-        ax.grid(axis='y')
-        ax.set_xticks(matching_columns['rating'].value_counts().index)
-        ax.set_ylim(0, max(matching_columns['rating'].value_counts().values) + 1)
-        ax.set_xlim(0, 6)
+            expected_labels = ['title', 'job_type', 'num_co-op', 'pay', 'pay_type', 'rating', 
+                            'recommend', 'text', 'verified']
+            matching_columns = co_review_df[expected_labels]
+            
+            # Display the reviews with only the rows of interest
+            # st.write("#### **Reviews**")
+            # st.table(matching_columns)
 
-        # displaying the plot
-        st.pyplot(fig)
-    
+        # Bar plots for rating distribution
+
+        # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
+        with st.expander("Histogram of Rating Distribution- Click to expand", expanded=False):
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                fig, ax = plt.subplots(figsize=(4, 2))
+                # x axis = rating values
+                # y axis = rating value frequency
+                ax.bar(matching_columns['rating'].value_counts().index, 
+                    matching_columns['rating'].value_counts().values,
+                    width = 0.5)
+                    
+                # plot design
+                ax.set_title('Company Ratings')
+                ax.set_xlabel('Rating')
+                ax.set_ylabel('Count')
+                ax.grid(axis='y')
+                ax.set_xticks(matching_columns['rating'].value_counts().index)
+                ax.set_ylim(0, max(matching_columns['rating'].value_counts().values) + 1)
+                ax.set_xlim(0, 6)
+
+                # displaying the plot
+                st.pyplot(fig)

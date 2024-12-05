@@ -83,11 +83,11 @@ def add_new_industry():
     current_app.logger.info(the_data)
 
     #extracting the variable
-    name = the_data['industry_name']
+    name = the_data['name']
     
-    query = f'''
+    query = '''
         INSERT INTO `industry` (name)
-        VALUES ('{name}')
+        VALUES (%s)
     '''
     # TODO: Make sure the version of the query above works properly
     # Constructing the query
@@ -96,11 +96,11 @@ def add_new_industry():
     # query += description + '", "'
     # query += category + '", '
     # query += str(price) + ')'
-    current_app.logger.info(query)
+    current_app.logger.info(query, name)
 
     # executing and committing the insert statement 
     cursor = db.get_db().cursor()
-    cursor.execute(query)
+    cursor.execute(query, name)
     db.get_db().commit()
     
     response = make_response("Successfully added industry")
@@ -127,9 +127,8 @@ def update_industry():
 def delete_position(industryID):
     query = 'DELETE FROM industry WHERE industryID = %s'
     cursor = db.get_db().cursor()
-    cursor.execute(query, (industryID,))
+    cursor.execute(query, (industryID))
     db.get_db().commit()
     response = make_response(jsonify({"message": "Industry deleted successfully"}))
     response.status_code = 200
     return response
-
