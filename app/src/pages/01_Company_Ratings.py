@@ -75,7 +75,6 @@ except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   filtered_co_df = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-# st.dataframe(filtered_co_df)
 
 # Retrieve each company's ID, name, and size since there were duplicates in company_df for future iterations over the data
 unique_company = filtered_co_df[['companyID', 'name', 'size']].drop_duplicates()
@@ -129,8 +128,6 @@ elif sort_by == 'Number of Ratings Asc':
 
 # ======================================================================================================================
 
-# st.write("# Company Ratings")
-
 rank = 1
 for _, row in unique_company.iterrows():
     # Extract company details
@@ -150,35 +147,35 @@ for _, row in unique_company.iterrows():
    
     # Formatting data to be more readable
     with st.container(border = True):
-        col1, col2 = st.columns([1, 1])  # Define two columns with relative widths
-        with col1:  # Left column for rank, name, and locations
+        col1, col2 = st.columns([1, 1])
+        with col1:  
             st.markdown(
                 f"### **{rank}. {name}**  \n"
                 f"**Locations:** {'; '.join([f'{city}, {state}' for city, state in city_state])}  "
                 )
-        with col2:  # Right column for overall rating
+        with col2:
             st.markdown(
                 f"<br><br>**Overall Rating:** {mean_rating}/5", 
                 unsafe_allow_html=True
                 )
 
-        col3, col4 = st.columns([1, 1])  # Create another row for industry and rating info
-        with col3:  # Left column for industry and size
+        col3, col4 = st.columns([1, 1])  
+        with col3:
             st.markdown(
                 f"**Industries:** {', '.join(industry)}  \n"
                 f"**Size:** {size}"
                 )
-        with col4:  # Right column for number of ratings
+        with col4:  
             st.markdown(
                 f"**Number of Ratings:** {num_ratings}"
                 )
         rank += 1
 
-        # Matching reviews to Company
+# Matching reviews to Company
 
         # Initialize empty df
         co_review_df = pd.DataFrame()
-            # Iterate through reviews_df
+        # Iterate through reviews_df
         for n in range(len(reviews_df['companyID'])):
 
             #match companyID from reviews_df to companyID from the unique company df
@@ -190,17 +187,14 @@ for _, row in unique_company.iterrows():
             # filtering df for column names of interest
             matching_columns = co_review_df[expected_labels]
             
-            # Display the reviews with only the rows of interest
-            # st.write("#### **Reviews**")
-            # st.table(matching_columns)
-
-        # Bar plots for rating distribution
+# Bar plots for rating distribution
 
         # creates 3 columnes with col2 being 2x bigger than col1 and col3 and placing plot in col2
         with st.expander("Histogram of Rating Distribution- Click to expand", expanded=False):
             col1, col2, col3 = st.columns([1, 2, 1])
             with col2:
                 fig, ax = plt.subplots(figsize=(4, 2))
+
                 # x axis = rating values | y axis = rating value frequency
                 ax.bar(matching_columns['rating'].value_counts().index, 
                     matching_columns['rating'].value_counts().values,
