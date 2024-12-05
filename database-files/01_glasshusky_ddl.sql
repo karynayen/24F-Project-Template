@@ -344,7 +344,7 @@ INSERT INTO location (street, city, `state`, country, postcode) VALUES
 
 -- count = 40
 INSERT INTO reviewer (major, `name`, `num_co-ops`, `year`, bio, active) VALUES
-('Computer Science', 'Alice Johnson', 2, 3, 'Passionate about AI and machine learning', TRUE),
+('Computer Science', 'Ally Descoteaux', 2, 3, 'Passionate about AI and machine learning', TRUE),
 ('Mechanical Engineering', 'Bob Williams', 1, 2, 'Love designing and building robots', FALSE),
 ('Business Administration', 'Carol Brown', 3, 4, 'Aspiring entrepreneur with a focus on sustainable business', TRUE),
 ('Electrical Engineering', 'David Lee', 2, 3, 'Interested in renewable energy systems', TRUE),
