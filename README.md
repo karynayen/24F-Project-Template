@@ -28,7 +28,7 @@ There are three major components which will each run in their own Docker Contain
 
 ### Setting up your repo
 1. Once the fork has been created, clone YOUR forked version of the repo to your computer. 
-1. Set up the `.env` file in the `api` folder based on the `.env.template` file. Make sure you set password. 
+1. Set up the `.env` file in the `api` folder based on the `.env.template` file. Make sure you set a password. 
 1. Start the docker containers. 
 
 
