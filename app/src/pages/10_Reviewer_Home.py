@@ -17,14 +17,14 @@ st.write('### What would you like to do today?')
 if st.button('See Your Reviews', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/See_User_Reviews.py')
+  st.switch_page('pages/12_See_User_Reviews.py')
 
 if st.button('Add a Review', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/Add_Review.py')
+  st.switch_page('pages/11_Add_Review.py')
 
 if st.button("See Company Reviews",
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/See_Company_Reviews.py')
+  st.switch_page('pages/13_See_Company_Reviews.py')

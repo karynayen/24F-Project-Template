@@ -40,13 +40,13 @@ def ReviewerHomeNav():
     st.sidebar.page_link("pages/10_Reviewer_Home.py", label="Reviewer Home", icon="🏠")
 
 def SeeUserReviewsNav():
-    st.sidebar.page_link("pages/See_User_Reviews.py", label="See Your Reviews", icon="📄")
+    st.sidebar.page_link("pages/12_See_User_Reviews.py", label="See Your Reviews", icon="📄")
 
 def AddReviewNav():
-    st.sidebar.page_link("pages/Add_Review.py", label="Add a Review", icon="➕")
+    st.sidebar.page_link("pages/11_Add_Review.py", label="Add a Review", icon="➕")
 
 def SeeCompanyReviewsNav():
-    st.sidebar.page_link("pages/See_Company_Reviews.py", label="See Company Reviews", icon="🏢")
+    st.sidebar.page_link("pages/13_See_Company_Reviews.py", label="See Company Reviews", icon="🏢")
 
 
 
