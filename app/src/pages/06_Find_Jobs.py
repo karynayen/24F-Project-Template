@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 SideBarLinks()
 
 # Set the header of the page
-st.header('Search Reviews')
+st.header('Company Reviews')
            
 
 
@@ -34,16 +34,14 @@ for row in companies_df.iterrows():
     companyID = row[1][0]
     reviews = pd.DataFrame(requests.get(f"http://api:4000/co/companies/{companyID}/reviews").json()).loc[:, ['title', 'text', 'reviewID', 'rating']]
     
-    st.write(reviews)
-
     # Create expanders for each company
     company_name = row[1][1]
     size = row[1][2]
-    with st.expander(f"### {company_name} -Click to expand", expanded=False):
+    with st.expander(f"### **{company_name}** -Click to expand", expanded=False):
         st.write(f"Size: {size}")
         for review in reviews.iterrows():
             with st.container(border=True):
-                st.write(f"Title: {review[1][0]}")
-                st.write(f"Review: {review[1][1]}")
-                st.write(f"Rating: {review[1][3]}/5")
+                st.write(f"**Title:** {review[1][0]}")
+                st.write(f"**Review:** {review[1][1]}")
+                st.write(f"**Rating:** {review[1][3]}/5")
 
