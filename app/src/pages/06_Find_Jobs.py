@@ -39,7 +39,7 @@ size_ranges = {
 
 
 # Fetch company data from API
-companies = requests.get('http://api:4000/co/companies')
+companies = requests.get('http://api:4000/co/companies_simple')
 companies.raise_for_status()
 companies = companies.json()
 companies_df = pd.DataFrame(companies)

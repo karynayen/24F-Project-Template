@@ -16,7 +16,7 @@ companies = Blueprint('companies', __name__)
 
 
 #------------------------------------------------------------
-# Get all companies from the system
+# Get all companies and their information from the system
 @companies.route('/companies', methods=['GET'])
 def get_companies(): 
     query = '''
@@ -36,7 +36,24 @@ def get_companies():
     the_response.status_code = 200
     return the_response
 
+# get only the data from the company table
+@companies.route('/companies_simple', methods=['GET'])
+def get_companies_simple(): 
+    query = '''
+        SELECT *
+        FROM company
+        '''
+    
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+
+    the_response = make_response(jsonify(theData))
+    the_response.status_code = 200
+    return the_response
+
 #------------------------------------------------------------
+
 # Add a new company to the system
 @companies.route('/companies', methods=['POST'])
 def add_company(): 
