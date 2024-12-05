@@ -86,7 +86,7 @@ def main():
     if company_id:
         positions = get_all_positions()
         position_names = [position['name'] for position in positions]
-        selected_position = st.selectbox("Select Position", position_names)
+        selected_position = st.selectbox("Select Position", position_names, key="selected_position")
         
         position_name = selected_position
         remote = False
@@ -96,9 +96,9 @@ def main():
         num_co_op = st.number_input("Number of Co-ops:", min_value=0)
         rating = st.slider("Rating:", min_value=0, max_value=5)
         recommend = st.checkbox("Recommend")
-        pay_type = st.selectbox("Pay Type:", ["hourly", "salary"])
+        pay_type = st.selectbox("Pay Type:", ["hourly", "salary"], key="pay_type")
         pay = st.number_input("Pay:", min_value=0.0, format="%.2f")
-        job_type = st.selectbox("Job Type:", ["Internship", "Co-op", "Full-time", "Part Time", "Other"])
+        job_type = st.selectbox("Job Type:", ["Internship", "Co-op", "Full-time", "Part Time", "Other"], key="job_type")
         text = st.text_area("Review Text:")
         verified = 0
         
