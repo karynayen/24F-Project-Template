@@ -60,7 +60,7 @@ def AdminPageNav():
     )
 
 def CoFilters():
-    st.sidebar.page_link("pages/Job_Seeker.py", label="Job Seeker")
+    st.sidebar.page_link("pages/38_Job_Seeker.py", label="Job Seeker")
     st.sidebar.page_link(
     "pages/37_See_Questions.py", label="See Questions and Answers", icon="💻"
     )
