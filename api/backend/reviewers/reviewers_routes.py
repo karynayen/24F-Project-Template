@@ -15,8 +15,7 @@ from backend.db_connection import db
 reviewers = Blueprint('reviewers', __name__)
 
 #------------------------------------------------------------
-# Get all the reviewers from the database, package them up,
-# and return them to the client
+# Get all reviewers and their information from the database
 @reviewers.route('/reviewers', methods=['GET'])
 def get_reviewers(): 
     query = 'SELECT * FROM reviewer'
@@ -30,7 +29,7 @@ def get_reviewers():
 
 
 # ------------------------------------------------------------
-# This is a POST route to add a new product.
+# This is a POST route to add a new reviewer.
 # Remember, we are using POST routes to create new entries
 # in the database. 
 @reviewers.route('/reviewers', methods=['POST'])
@@ -54,15 +53,6 @@ def add_new_reviewer():
     VALUES (%s, %s, %s, %s, %s, %s)
     '''
     data = (major, name, num_coops, year, bio, active)
-    
-
-    # TODO: Make sure the version of the query above works properly
-    # Constructing the query
-    # query = 'insert into products (product_name, description, category, list_price) values ("'
-    # query += name + '", "'
-    # query += description + '", "'
-    # query += category + '", '
-    # query += str(price) + ')'
     current_app.logger.info(query)
 
     # executing and committing the insert statement 
