@@ -1,6 +1,8 @@
 # GlassHusky Repository
 Team members: Karyna Yen, Quangvinh Tran, Ikechukwu Ekpunobi, Patrick Rose, Astro Ohnuma
 
+Demo Link: https://www.youtube.com/watch?v=NnRe_Mj0FcM
+
 ## Project Description
 Imagine a Co-op review platform that goes beyond standard ratings to provide co-op seekers with actionable insights about their potential workplaces. Our app is designed to empower students by offering a comprehensive, data-driven view of internship experiences across industries. While existing platforms like Glassdoor provide general company ratings, they often overlook the unique challenges and expectations of Co-ops. Co-ops frequently face limited access to information on workplace culture, mentorship quality, and skill-building opportunities specific to early-career roles. Our platform closes this gap, giving students and young professionals the detailed guidance they need to make informed choices.
 <br><br>
